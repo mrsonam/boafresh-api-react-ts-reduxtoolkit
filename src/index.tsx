@@ -5,14 +5,18 @@ import App from './App';
 import { store } from './app/store';
 import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
+import { ThemeProvider } from '@emotion/react';
+import theme from './theme';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
+    <React.StrictMode>
+        <ThemeProvider theme={theme}>
+            <Provider store={store}>
+                <App />
+            </Provider>
+        </ThemeProvider>
+    </React.StrictMode>,
+    document.getElementById('root'),
 );
 
 // If you want your app to work offline and load faster, you can change

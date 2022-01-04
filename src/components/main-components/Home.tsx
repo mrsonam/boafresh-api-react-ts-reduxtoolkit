@@ -1,22 +1,18 @@
+import { Stack } from '@mui/material';
 import React from 'react';
-import logo from '../logo.svg';
-import { Counter } from '../../features/counter/Counter';
-import { useGetHomeQuery } from '../../services/home';
-
+import Banner from '../sub-components/Home/Banner';
+import Categories from '../sub-components/Home/Categories';
+import NewDishes from '../sub-components/Home/NewDishes';
+import './Home.css';
 
 const Home: React.FC = (): JSX.Element => {
-    const { data, error, isLoading } = useGetHomeQuery();
     return (
-        <div>
-            {isLoading ? (
-                <> Loading </>
-            ) : data ? (
-                data.data.map((category) => {
-                    return console.log(category);
-                })
-            ) : (
-                <></>
-            )}
+        <div className="main">
+            <Stack className="home" spacing={3}>
+                <Banner />
+                <Categories />
+                <NewDishes/>
+            </Stack>
         </div>
     );
 };

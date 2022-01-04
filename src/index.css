@@ -1,11 +1,45 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap');
-
 html, body {
   margin: 0;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 code {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
+
+.font-link {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 50px;
+}
+
+.primaryColor{
+  color: #ee4238
+}
+
+.lightPrimaryColor{
+  color: #428940;
+}
+
+.darkPrimaryColor{
+  color: #428940;
+}
+
+.headerTextColor{
+  color: #77777a;
+}
+
+.saleBgColor{
+  color: #e01212;
+}
+
+
+            /* "addToCartBgColor": "#80bb01",
+            "addToCartTextColor": "#ffffff",
+            "addToCartHoverTextColor": "#ffffff",
+            "addToCartBgHoverColor": "#5d8801",
+            "paginationBgColor": "#80bb01",
+            "stockColor": "#30b878",
+            "outOfStockColor": "#a80135",
+            "searchButtonColor": "#428940",
+            "oldPriceColor": "#000000",
+            "footerColor": "#2f2f2f" */

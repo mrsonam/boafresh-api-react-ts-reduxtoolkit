@@ -1,0 +1,13 @@
+*{
+    font-family: 'Montserrat', sans-serif;
+}
+
+.brandName{
+    margin: 15px auto;
+    text-align: center;
+    font-weight: bolder;
+}
+
+.sideBar{
+    max-width: 100vw;
+}

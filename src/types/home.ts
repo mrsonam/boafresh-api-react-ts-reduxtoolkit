@@ -1,4 +1,4 @@
-interface Detail {
+export interface Detail {
     title: string;
     category_search: string;
     web_link: string;
@@ -76,7 +76,7 @@ interface SectionDetails {
     start_date: string | null;
     end_date: string | null;
     category_search: string | null;
-    products: Product[] | null;
+    products: Product[] | [];
     brands:
         | {
               id: number;
@@ -132,8 +132,8 @@ export interface Home {
     status: boolean;
     position: number;
     details: Detail[] | [];
-    sectionDetails: SectionDetails | null;
-    category: Category[] | null;
+    sectionDetails: SectionDetails;
+    categories: Category[] | [] ;
 }
 
 export interface HomeResponse {
