@@ -7,9 +7,11 @@ import {
     ListItemText,
     Drawer,
     ListSubheader,
+    Box,
 } from '@mui/material';
 import { useGetAllCategoriesQuery } from '../../../services/category';
 import './SideBar.css';
+import { NavLink } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -29,15 +31,26 @@ const SideBar = () => {
             anchor="left"
         >
             <Toolbar>
-                <Typography
-                    color='primary'
-                    variant="h5"
-                    component="div"
-                    align="center"
-                    className="brandName"
-                >
-                    Boa Fresh
-                </Typography>
+                <NavLink to="/">
+                    <Box display={'flex'} className="brandName">
+                        <Typography
+                            color="primary"
+                            variant="h4"
+                            component="div"
+                            align="center"
+                        >
+                            Boa
+                        </Typography>
+                        <Typography
+                            color="secondary"
+                            variant="h4"
+                            component="div"
+                            align="center"
+                        >
+                            Fresh
+                        </Typography>
+                    </Box>
+                </NavLink>
             </Toolbar>
             <List
                 aria-labelledby="categories-subheader"
@@ -47,21 +60,31 @@ const SideBar = () => {
                     </ListSubheader>
                 }
             >
+                <NavLink to="/products">
+                    <ListItem button key="products">
+                        <ListItemText primary="All Products" />
+                    </ListItem>
+                </NavLink>
+
                 {isLoading ? (
                     <Typography variant="h6" component="div">
-                    Loading...
-                </Typography>
+                        Loading...
+                    </Typography>
                 ) : data ? (
                     data.data.map((category) => {
                         return (
-                            <ListItem button key={category.title}>
-                                <ListItemText
-                                    primary={
-                                        category.title.charAt(0) +
-                                        category.title.slice(1).toLowerCase()
-                                    }
-                                />
-                            </ListItem>
+                            <NavLink to={`/products/category/${category.id}`} key={category.id}>
+                                <ListItem button key={category.title}>
+                                    <ListItemText
+                                        primary={
+                                            category.title.charAt(0) +
+                                            category.title
+                                                .slice(1)
+                                                .toLowerCase()
+                                        }
+                                    />
+                                </ListItem>
+                            </NavLink>
                         );
                     })
                 ) : (
@@ -76,13 +99,16 @@ const SideBar = () => {
                     </ListSubheader>
                 }
             >
-                <ListItem button key='signup'>
-                    <ListItemText primary="Create Account" />
-                </ListItem>
-                <ListItem button key='login'>
-                    <ListItemText primary="Login" />
-                </ListItem>
-                
+                <NavLink to="/signup">
+                    <ListItem button key="signup">
+                        <ListItemText primary="Create Account" />
+                    </ListItem>
+                </NavLink>
+                <NavLink to="/login">
+                    <ListItem button key="login">
+                        <ListItemText primary="Login" />
+                    </ListItem>
+                </NavLink>
             </List>
         </Drawer>
     );

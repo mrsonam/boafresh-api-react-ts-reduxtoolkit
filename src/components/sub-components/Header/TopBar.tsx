@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SearchRounded } from '@mui/icons-material';
 import {
     InputAdornment,
@@ -8,16 +8,16 @@ import {
     Button,
     IconButton,
     Typography,
+    Badge,
 } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { useGetAllCategoriesQuery } from '../../../services/category';
+import { NavLink } from 'react-router-dom';
 import './TopBar.css';
-import { height } from '@mui/system';
 
 const drawerWidth = 240;
 
 const TopBar = () => {
-    const { data, error, isLoading } = useGetAllCategoriesQuery();
+    const [query, setQuery] = useState('');
     return (
         <AppBar
             position="static"
@@ -29,13 +29,12 @@ const TopBar = () => {
         >
             <Toolbar className="topBar">
                 <TextField
-                size='small'
-                className='searchBar'
+                    size="small"
+                    className="searchBar"
                     sx={{
                         [`& fieldset`]: {
                             borderWidth: '2px',
                             borderRadius: '16px',
-                            width: '400px',
                         },
                     }}
                     placeholder="Search..."
@@ -47,19 +46,26 @@ const TopBar = () => {
                         ),
                     }}
                     variant="outlined"
+                    value={query}
+                    onChange={(e) => {setQuery(e.target.value)}}
                 />
+                <NavLink to={`/products/${query}`}>
+                    <Button onClick={() => setQuery('')}>Search</Button>
+                </NavLink>
                 <Typography
-                    variant="h6"
+                    variant="h6"    
                     component="div"
                     sx={{ flexGrow: 1 }}
                 ></Typography>
                 <IconButton
-                className='cartIcon'
+                    className="cartIcon"
                     size="large"
                     aria-label="menu"
                     sx={{ mr: 2 }}
                 >
-                    <ShoppingCartIcon fontSize="large" color='primary'/>
+                    <Badge badgeContent={0} color="secondary" showZero>
+                        <ShoppingCartIcon fontSize="large" color="primary" />
+                    </Badge>
                 </IconButton>
             </Toolbar>
         </AppBar>

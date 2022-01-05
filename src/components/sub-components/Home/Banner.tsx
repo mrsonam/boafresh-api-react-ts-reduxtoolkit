@@ -12,7 +12,7 @@ const Banner = () => {
         <Box className="banner" sx={{borderRadius: '20px'}}>
             <Carousel className="carousel">
                 {data.data[0].details.map((banner) => (
-                    <Paper>
+                    <Paper key={banner.id}>
                         <img src={banner.images} alt="" className="image" />
                     </Paper>
                 ))}

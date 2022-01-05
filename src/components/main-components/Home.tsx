@@ -1,4 +1,4 @@
-import { Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import React from 'react';
 import Banner from '../sub-components/Home/Banner';
 import Categories from '../sub-components/Home/Categories';
@@ -7,13 +7,13 @@ import './Home.css';
 
 const Home: React.FC = (): JSX.Element => {
     return (
-        <div className="main">
+        <Box className="main" component='main'>
             <Stack className="home" spacing={3}>
                 <Banner />
                 <Categories />
                 <NewDishes/>
             </Stack>
-        </div>
+        </Box>
     );
 };
 

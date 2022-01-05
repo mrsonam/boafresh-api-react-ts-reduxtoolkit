@@ -12,24 +12,8 @@ code {
   font-size: 50px;
 }
 
-.primaryColor{
-  color: #ee4238
-}
-
-.lightPrimaryColor{
-  color: #428940;
-}
-
-.darkPrimaryColor{
-  color: #428940;
-}
-
-.headerTextColor{
-  color: #77777a;
-}
-
-.saleBgColor{
-  color: #e01212;
+.a{
+  text-decoration: none;
 }
 
 
