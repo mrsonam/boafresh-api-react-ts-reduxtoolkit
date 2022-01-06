@@ -2,7 +2,7 @@
   "name": "boafresh-api-react-ts-reduxtoolkit",
   "version": "0.1.0",
   "engines": {
-    "node": "14.x"
+    "node": "14.17.4"
   },
   "private": true,
   "dependencies": {
