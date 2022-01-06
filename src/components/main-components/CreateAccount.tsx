@@ -150,7 +150,7 @@ const CreateAccount = () => {
                         </Stack>
                     </CardContent>
                 </Card>
-                {responseInfo.isError ? (
+                {/* {responseInfo.isError ? (
                     <Snackbar open={open} autoHideDuration={6000}>
                         <Alert severity="error" sx={{ width: '100%' }} title={responseInfo.error.data.errors[0].title}>
                             {responseInfo.error ? (
@@ -180,7 +180,7 @@ const CreateAccount = () => {
                     </Snackbar>
                 ) : (
                     <></>
-                )}
+                )} */}
             </Box>
         </Box>
     );
