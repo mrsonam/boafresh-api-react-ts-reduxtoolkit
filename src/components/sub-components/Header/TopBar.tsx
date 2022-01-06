@@ -10,27 +10,36 @@ import {
     Typography,
     Badge,
 } from '@mui/material';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import {ShoppingCartOutlined} from '@mui/icons-material';
 import { NavLink } from 'react-router-dom';
-import './TopBar.css';
+// import './TopBar.css';
+import { makeStyles } from '@mui/styles';
 
-const drawerWidth = 240;
+const useStyle = makeStyles({
+    appBar: {
+        background: 'transparent',
+        boxShadow: 'none',
+        width: `calc(100% - 240px)`,
+        marginLeft: '240px',
+    },
+    topBar: {
+        margin: '15px 15px 15px 25px'
+    }
+});
+
+const drawerWidth = 210;
 
 const TopBar = () => {
+    const classes = useStyle();
     const [query, setQuery] = useState('');
     return (
         <AppBar
+            className={classes.appBar}
             position="static"
-            sx={{
-                width: `calc(100% - ${drawerWidth}px)`,
-                ml: `${drawerWidth}px`,
-            }}
-            style={{ background: 'transparent', boxShadow: 'none' }}
         >
-            <Toolbar className="topBar">
+            <Toolbar className={classes.topBar}>
                 <TextField
-                    size="small"
-                    className="searchBar"
+                    size="small"    
                     sx={{
                         [`& fieldset`]: {
                             borderWidth: '2px',
@@ -47,13 +56,15 @@ const TopBar = () => {
                     }}
                     variant="outlined"
                     value={query}
-                    onChange={(e) => {setQuery(e.target.value)}}
+                    onChange={(e) => {
+                        setQuery(e.target.value);
+                    }}
                 />
                 <NavLink to={`/products/${query}`}>
                     <Button onClick={() => setQuery('')}>Search</Button>
                 </NavLink>
                 <Typography
-                    variant="h6"    
+                    variant="h6"
                     component="div"
                     sx={{ flexGrow: 1 }}
                 ></Typography>
@@ -64,7 +75,7 @@ const TopBar = () => {
                     sx={{ mr: 2 }}
                 >
                     <Badge badgeContent={0} color="secondary" showZero>
-                        <ShoppingCartIcon fontSize="large" color="primary" />
+                        <ShoppingCartOutlined fontSize="large" color="primary" />
                     </Badge>
                 </IconButton>
             </Toolbar>

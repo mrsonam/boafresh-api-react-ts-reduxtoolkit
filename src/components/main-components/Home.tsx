@@ -3,12 +3,24 @@ import React from 'react';
 import Banner from '../sub-components/Home/Banner';
 import Categories from '../sub-components/Home/Categories';
 import NewDishes from '../sub-components/Home/NewDishes';
-import './Home.css';
+import { makeStyles } from '@mui/styles';
+
+const useStyle = makeStyles({
+    main: {
+        maxWidth: '100vw',
+        marginTop: '15px',
+        marginLeft: '240px',
+    },
+    home:{
+        margin: '0 50px',
+    }
+});
 
 const Home: React.FC = (): JSX.Element => {
+    const classes = useStyle();
     return (
-        <Box className="main" component='main'>
-            <Stack className="home" spacing={3}>
+        <Box className={classes.main} component='main'>
+            <Stack className={classes.home} spacing={3}>
                 <Banner />
                 <Categories />
                 <NewDishes/>

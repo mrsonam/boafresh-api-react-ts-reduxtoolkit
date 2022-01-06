@@ -7,23 +7,7 @@ code {
   font-family: 'Montserrat', sans-serif;
 }
 
-.font-link {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 50px;
-}
-
-.a{
+a{
   text-decoration: none;
+  color: #000;
 }
-
-
-            /* "addToCartBgColor": "#80bb01",
-            "addToCartTextColor": "#ffffff",
-            "addToCartHoverTextColor": "#ffffff",
-            "addToCartBgHoverColor": "#5d8801",
-            "paginationBgColor": "#80bb01",
-            "stockColor": "#30b878",
-            "outOfStockColor": "#a80135",
-            "searchButtonColor": "#428940",
-            "oldPriceColor": "#000000",
-            "footerColor": "#2f2f2f" */

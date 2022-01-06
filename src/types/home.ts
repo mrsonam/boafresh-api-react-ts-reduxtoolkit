@@ -1,3 +1,4 @@
+import { Category } from "./categories";
 import { Product } from "./products";
 
 export interface Detail {
@@ -37,45 +38,6 @@ interface SectionDetails {
               slug: string;
           }[]
         | null;
-}
-
-interface Category {
-    id: number;
-    parentId: number | null;
-    title: string;
-    description: string | null;
-    slug: string;
-    icon: string;
-    backgroundImage: string;
-    position: number;
-    hasProduct: boolean;
-    avgRating: number;
-    ratingCount: number;
-    productCount: number;
-    userRating: null;
-    banner: [];
-    hierarchy_level: number;
-    isRestaurant: boolean;
-    isRestaurantOpen: boolean;
-    profile: {
-        id: number;
-        openingTime: string;
-        description: string;
-        logo: string;
-        address: {
-            country: string;
-            provience: string;
-            district: string;
-            local_government: string;
-            ward: string;
-            street_address: null;
-            formatted_address: string;
-            intersection: string;
-        };
-        minimumOrder: number;
-        fullAddress: string;
-        promo_text: string;
-    } | null;
 }
 
 export interface Home {

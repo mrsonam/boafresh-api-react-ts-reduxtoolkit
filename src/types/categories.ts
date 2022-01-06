@@ -54,8 +54,6 @@ export interface Category {
     } | null;
 }
 
-export type Categories = Category[];
-
 export interface CategoryResponse {
     meta: {
         copyright: string;
@@ -73,7 +71,7 @@ export interface CategoryResponse {
             links: [];
         };
     };
-    data: Categories;
+    data: Category[];
     code: number;
 }
 

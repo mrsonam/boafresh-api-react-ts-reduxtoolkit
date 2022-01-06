@@ -9,32 +9,82 @@ import {
     CardActionArea,
     Grid,
     Stack,
+    Skeleton,
 } from '@mui/material';
 import { useGetHomeQuery } from '../../../services/home';
-import './NewDishes.css';
 import { makeStyles } from '@mui/styles';
+import { Product } from '../../../types/products';
 
 const useStyle = makeStyles({
     heading: {
         marginBottom: '30px',
     },
+    productCard: {
+        borderRadius: '20px',
+    },
 });
 
 const NewDishes = () => {
+    const array = [1, 2, 3, 4, 5, 6];
     const classes = useStyle();
     const { data, error, isLoading } = useGetHomeQuery();
-    return (
+    return error ? (
+        <>Something is Wrong</>
+    ) : isLoading ? (
         <Box>
-            <Typography variant="h5" component="div" className={classes.heading}>
-                {data ? data.data[4].sectionDetails.title : <></>}
+            <Skeleton
+                animation="wave"
+                variant="text"
+                width={300}
+                height={60}
+                className={classes.heading}
+            />
+            <Grid container spacing={5}>
+                {array.map((elem) => {
+                    return (
+                        <Grid item xs={2.4} key={elem}>
+                            <Skeleton
+                                animation="wave"
+                                variant="rectangular"
+                                width={'100%'}
+                                height={250}
+                                className={classes.productCard}
+                            />
+                            <Skeleton
+                                animation="wave"
+                                variant="text"
+                                width={100}
+                                height={40}
+                            />
+                            <Skeleton
+                                animation="wave"
+                                variant="text"
+                                width={50}
+                                height={30}
+                            />
+                            <Skeleton
+                                animation="wave"
+                                variant="rectangular"
+                                width={'100%'}
+                                height={30}
+                            />
+                        </Grid>
+                    );
+                })}
+            </Grid>
+        </Box>
+    ) : data ? (
+        <Box>
+            <Typography
+                variant="h4"
+                component="div"
+                className={classes.heading}
+            >
+                {data.data[4].sectionDetails.title}
             </Typography>
             <Grid container spacing={5}>
-                {isLoading ? (
-                    <Typography variant="h6" component="div">
-                        Loading...
-                    </Typography>
-                ) : data ? (
-                    data.data[4].sectionDetails.products.map((product) => {
+                {(data.data[4].sectionDetails.products as Product[]).map(
+                    (product: Product) => {
                         return (
                             <Grid item xs={2.4} key={product.id}>
                                 <Card
@@ -72,7 +122,6 @@ const NewDishes = () => {
                                             <Button
                                                 size="small"
                                                 variant="contained"
-                                                color="secondary"
                                             >
                                                 Add To Cart
                                             </Button>
@@ -81,13 +130,12 @@ const NewDishes = () => {
                                 </Card>
                             </Grid>
                         );
-                    })
-                ) : (
-                    <></>
+                    },
                 )}
             </Grid>
         </Box>
+    ) : (
+        <></>
     );
 };
-
 export default NewDishes;
