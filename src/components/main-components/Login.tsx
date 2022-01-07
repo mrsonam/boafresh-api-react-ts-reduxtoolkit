@@ -10,11 +10,12 @@ import {
     Divider,
     InputAdornment,
     FormControlLabel,
-    Checkbox
+    Checkbox,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { EmailOutlined, PasswordOutlined } from '@mui/icons-material';
+import { useLoginUserMutation } from '../../services/user';
 
 const useStyle = makeStyles({
     main: {
@@ -39,8 +40,19 @@ const useStyle = makeStyles({
 
 const Login = () => {
     const classes = useStyle();
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const [loginUser, responseInfo] = useLoginUserMutation();
+    if (responseInfo.isSuccess) {
+        window.localStorage.setItem(
+            'token',
+            `"Bearer ${responseInfo.data.access_token}"`
+        );
+        window.location.href = './products';
+    }
+
     return (
         <Box component="main" className={classes.main}>
             <Box className={classes.home}>
@@ -82,21 +94,38 @@ const Login = () => {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-                            <FormControlLabel control={<Checkbox style={{padding: 0, marginRight: 5}} />} label="Remember Me" />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        style={{ padding: 0, marginRight: 5 }}
+                                    />
+                                }
+                                label="Remember Me"
+                            />
                             <NavLink to="/forgotPassword">
                                 <Typography variant="subtitle1">
                                     Forgot Password?
                                 </Typography>
                             </NavLink>
-                            <Button variant="contained">Login</Button>
+                            <Button
+                                variant="contained"
+                                onClick={() => {
+                                    loginUser({ email, password });
+                                }}
+                            >
+                                Login
+                            </Button>
                             <Divider />
                             <Box display={'flex'}>
                                 <Typography variant="subtitle1">
                                     Don't have an Account?&nbsp;&nbsp;
                                 </Typography>
                                 <NavLink to="/signup">
-                                    <Typography variant="subtitle1" color='secondary'>
-                                        SignUp now!
+                                    <Typography
+                                        variant="subtitle1"
+                                        color="secondary"
+                                    >
+                                        Signup now!
                                     </Typography>
                                 </NavLink>
                             </Box>

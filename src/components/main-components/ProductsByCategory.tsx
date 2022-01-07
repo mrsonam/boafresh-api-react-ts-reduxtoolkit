@@ -121,7 +121,7 @@ const ProductsByCategory = () => {
                 <Grid container spacing={5}>
                     {data.data.map((product) => {
                         return (
-                            <Grid item xs={2.4}>
+                            <Grid item xs={2.4} key={product.id}> 
                                 <Card
                                     sx={{ borderRadius: '20px' }}
                                     className={classes.productCard}

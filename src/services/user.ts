@@ -8,21 +8,36 @@ import {
     clientSecret,
     grantType,
 } from '../apiConstants';
-import { UserResponse, CreateUserBody, LoginUserBody } from '../types/user';
-
+import {
+    CreateUserBody,
+    LoginUserBody,
+    CreateUserResponse,
+    LoginUserSuccessResponse,
+    UserProfileResponse,
+    UpdateProfileBody,
+} from '../types/user';
+let token = '';
+if(localStorage.getItem('token') !== null){
+    token= JSON.parse(localStorage.getItem('token') || '');
+}
 // Define a service using a base URL and expected endpoints
 export const userApi = createApi({
     reducerPath: 'userApi',
     baseQuery: fetchBaseQuery({
         baseUrl: baseURL,
         prepareHeaders: (headers) => {
-            headers.set('Warehouse-Id', warehouseId);
             headers.set('Api-key', apiKey);
+            // headers.set('Authorization', localStorage.getItem('token') || ' ');
+            if (token !== null) {
+                headers.set('Authorization', token);
+            } else {
+                headers.set('Warehouse-Id', warehouseId);
+            }
             return headers;
         },
     }),
     endpoints: (builder) => ({
-        createNewUser: builder.mutation<UserResponse, CreateUserBody>({
+        createNewUser: builder.mutation<CreateUserResponse, CreateUserBody>({
             query: ({ firstName, lastName, email, phone, password }) => ({
                 url: 'api/v4/auth/signup',
                 method: 'POST',
@@ -35,7 +50,7 @@ export const userApi = createApi({
                 },
             }),
         }),
-        loginUser: builder.mutation<UserResponse, LoginUserBody>({
+        loginUser: builder.mutation<LoginUserSuccessResponse, LoginUserBody>({
             query: ({ email, password }) => ({
                 url: `api/v4/auth/login`,
                 method: 'POST',
@@ -48,9 +63,33 @@ export const userApi = createApi({
                 },
             }),
         }),
+        getUserProfile: builder.query<UserProfileResponse, void>({
+            query: () => ({
+                url: `api/v4/profile/show`,
+                method: 'GET',
+            }),
+        }),
+        updateUserProfile: builder.mutation<
+            UserProfileResponse,
+            UpdateProfileBody
+        >({
+            query: ({ firstName, lastName }) => ({
+                url: 'api/v4/profile',
+                method: 'PATCH',
+                body: JSON.stringify({
+                    'first-name': firstName,
+                    'last-name': lastName,
+                }),
+            }),
+        }),
     }),
 });
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useCreateNewUserMutation, useLoginUserMutation } = userApi;
+export const {
+    useCreateNewUserMutation,
+    useLoginUserMutation,
+    useGetUserProfileQuery,
+    useUpdateUserProfileMutation,
+} = userApi;

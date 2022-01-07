@@ -33,6 +33,7 @@ const SideBar = () => {
     const classes = useStyle();
     const array = [1, 2, 3, 4, 5, 6];
     const { data, error, isLoading } = useGetAllCategoriesQuery();
+    const token = localStorage.getItem('token');
     return error ? (
         <>Something is Wrong</>
     ) : (
@@ -58,7 +59,7 @@ const SideBar = () => {
                         </Typography>
                         <Typography
                             variant="h4"
-                            color='text.disabled'
+                            color="text.disabled"
                             fontWeight={600}
                             component="div"
                             align="center"
@@ -135,16 +136,33 @@ const SideBar = () => {
                     </ListSubheader>
                 }
             >
-                <NavLink to="/signup">
-                    <ListItem button key="signup">
-                        <ListItemText primary="Create Account" />
-                    </ListItem>
-                </NavLink>
-                <NavLink to="/login">
-                    <ListItem button key="login">
-                        <ListItemText primary="Login" />
-                    </ListItem>
-                </NavLink>
+                {token !== null ? (
+                    <>
+                        <NavLink to="/profile">
+                            <ListItem button>
+                                <ListItemText primary="Profile" />
+                            </ListItem>
+                        </NavLink>
+                        <NavLink to="/">
+                            <ListItem button onClick={() => localStorage.removeItem('token')}>
+                                <ListItemText primary="Logout" />
+                            </ListItem>
+                        </NavLink>
+                    </>
+                ) : (
+                    <>
+                        <NavLink to="/signup">
+                            <ListItem button key="signup">
+                                <ListItemText primary="Create Account" />
+                            </ListItem>
+                        </NavLink>
+                        <NavLink to="/login">
+                            <ListItem button key="login">
+                                <ListItemText primary="Login" />
+                            </ListItem>
+                        </NavLink>
+                    </>
+                )}
             </List>
         </Drawer>
     );

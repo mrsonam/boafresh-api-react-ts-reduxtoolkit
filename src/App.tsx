@@ -8,6 +8,7 @@ import ProductsByCategory from './components/main-components/ProductsByCategory'
 import SearchedProducts from './components/main-components/SearchedProducts';
 import CreateAccount from './components/main-components/CreateAccount';
 import Login from './components/main-components/Login';
+import Profile from './components/main-components/Profile';
 
 const App: React.FC = (): JSX.Element => {
   return (
@@ -20,6 +21,7 @@ const App: React.FC = (): JSX.Element => {
         <Route path='/products/category/:categoryId' element={<ProductsByCategory/>}/>
         <Route path='/signup' element={<CreateAccount/>} />
         <Route path='/login' element={<Login/>} />
+        <Route path='/profile' element={<Profile/>} />
       </Routes>
       
     </Router>

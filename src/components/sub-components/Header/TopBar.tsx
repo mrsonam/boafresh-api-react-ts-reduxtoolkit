@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import { SearchRounded } from '@mui/icons-material';
 import {
-    InputAdornment,
+    Autocomplete,
     TextField,
     AppBar,
     Toolbar,
-    Button,
     IconButton,
     Typography,
     Badge,
+    Avatar,
 } from '@mui/material';
-import {ShoppingCartOutlined} from '@mui/icons-material';
+import { ShoppingCartOutlined } from '@mui/icons-material';
 import { NavLink } from 'react-router-dom';
-// import './TopBar.css';
+import { useGetAllProductsQuery } from '../../../services/products';
 import { makeStyles } from '@mui/styles';
+import { useGetUserProfileQuery } from '../../../services/user';
 
 const useStyle = makeStyles({
     appBar: {
@@ -23,45 +24,65 @@ const useStyle = makeStyles({
         marginLeft: '240px',
     },
     topBar: {
-        margin: '15px 15px 15px 25px'
-    }
+        margin: '15px 15px 15px 25px',
+    },
 });
-
-const drawerWidth = 210;
 
 const TopBar = () => {
     const classes = useStyle();
+
     const [query, setQuery] = useState('');
+
+    const userProfile = useGetUserProfileQuery();
+    let imageUrl = '';
+    if (userProfile.isSuccess && userProfile.data) {
+        imageUrl = userProfile.data.data.image;
+    }
+
+    const products = useGetAllProductsQuery();
+    let options: string[] = [];
+    if (products.isSuccess && products.data) {
+        products.data.data.forEach((product) => {
+            options.push(product.title);
+        });
+    }
+
+    const token = localStorage.getItem('token');
+
     return (
-        <AppBar
-            className={classes.appBar}
-            position="static"
-        >
+        <AppBar className={classes.appBar} position="static">
             <Toolbar className={classes.topBar}>
-                <TextField
-                    size="small"    
+                <Autocomplete
+                    freeSolo
+                    disableClearable
+                    size="small"
                     sx={{
+                        width: '300px',
                         [`& fieldset`]: {
                             borderWidth: '2px',
                             borderRadius: '16px',
                         },
                     }}
-                    placeholder="Search..."
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <SearchRounded />
-                            </InputAdornment>
-                        ),
+                    options={options}
+                    inputValue={query}
+                    onInputChange={(event: any, newValue: string) => {
+                        setQuery(newValue);
                     }}
-                    variant="outlined"
-                    value={query}
-                    onChange={(e) => {
-                        setQuery(e.target.value);
-                    }}
+                    renderInput={(params) => (
+                        <TextField placeholder="Search" {...params} />
+                    )}
                 />
+
                 <NavLink to={`/products/${query}`}>
-                    <Button onClick={() => setQuery('')}>Search</Button>
+                    <IconButton
+                        className="cartIcon"
+                        size="large"
+                        aria-label="menu"
+                        sx={{ mr: 2 }}
+                        onClick={() => setQuery('')}
+                    >
+                        <SearchRounded />
+                    </IconButton>
                 </NavLink>
                 <Typography
                     variant="h6"
@@ -75,9 +96,21 @@ const TopBar = () => {
                     sx={{ mr: 2 }}
                 >
                     <Badge badgeContent={0} color="secondary" showZero>
-                        <ShoppingCartOutlined fontSize="large" color="primary" />
+                        <ShoppingCartOutlined
+                            fontSize="large"
+                            color="primary"
+                        />
                     </Badge>
                 </IconButton>
+                {token !== null ? (
+                    <Avatar
+                        alt="Profile Pic"
+                        src={imageUrl}
+                        sx={{ width: 45, height: 45, mr: 1 }}
+                    />
+                ) : (
+                    <></>
+                )}
             </Toolbar>
         </AppBar>
     );

@@ -150,37 +150,27 @@ const CreateAccount = () => {
                         </Stack>
                     </CardContent>
                 </Card>
-                {/* {responseInfo.isError ? (
+                {responseInfo.isError ? (
                     <Snackbar open={open} autoHideDuration={6000}>
-                        <Alert severity="error" sx={{ width: '100%' }} title={responseInfo.error.data.errors[0].title}>
-                            {responseInfo.error ? (
-                                responseInfo.error.data.errors[0].message
-                            ) : (
-                                <></>
-                            )}
+                        <Alert severity="error" sx={{ width: '100%' }}>
+                            Error
                         </Alert>
                     </Snackbar>
                 ) : responseInfo.isSuccess ? (
                     <Snackbar
                         open={open}
                         autoHideDuration={6000}
-                        onClose={() => {
-                            setOpen(false);
-                        }}
                     >
                         <Alert
-                            onClose={() => {
-                                setOpen(false);
-                            }}
                             severity="success"
                             sx={{ width: '100%' }}
                         >
-                            {responseInfo}
+                            Account Created Successfuly
                         </Alert>
                     </Snackbar>
                 ) : (
                     <></>
-                )} */}
+                )}
             </Box>
         </Box>
     );

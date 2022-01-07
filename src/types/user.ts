@@ -17,7 +17,7 @@ interface Error {
     message: string;
 }
 
-export interface UserSuccessResponse {
+interface CreateUserSuccessResponse {
     meta: {
         copyright: string;
         emails: string;
@@ -39,7 +39,7 @@ export interface UserSuccessResponse {
     code: number;
 }
 
-export interface UserErrorResponse {
+interface UserErrorResponse {
     meta: {
         version: string;
         error_type: string;
@@ -47,7 +47,19 @@ export interface UserErrorResponse {
     errors: Error[];
 }
 
-export type UserResponse = UserSuccessResponse | UserErrorResponse;
+export interface LoginUserSuccessResponse {
+    token_type: string;
+    expires_in: number;
+    access_token: string;
+    refresh_token: string;
+    warehouse_id: number;
+}
+
+export type CreateUserResponse = CreateUserSuccessResponse | UserErrorResponse;
+
+export type LoginUserResponse = LoginUserSuccessResponse | UserErrorResponse;
+
+export type UserProfileResponse = CreateUserSuccessResponse;
 
 export interface CreateUserBody {
     firstName: string;
@@ -60,4 +72,9 @@ export interface CreateUserBody {
 export interface LoginUserBody {
     email: string;
     password: string;
+}
+
+export interface UpdateProfileBody {
+    firstName: string;
+    lastName: string;
 }
