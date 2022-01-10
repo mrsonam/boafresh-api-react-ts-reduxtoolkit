@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useGetAllProductsQuery } from '../../services/products';
 import {
     Box,
@@ -13,6 +13,8 @@ import {
     Skeleton,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { NavLink } from 'react-router-dom';
+import CartDialog from '../sub-components/Cart/CartDialog';
 
 const useStyle = makeStyles({
     heading: {
@@ -31,10 +33,25 @@ const useStyle = makeStyles({
     },
 });
 
-const Products = () => {
+const Products: React.FC = (): JSX.Element => {
+    const [open, setOpen] = useState(false);
+    const [productId, setProductId] = useState(0);
+
     const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
     const classes = useStyle();
+
     const { data, error, isLoading } = useGetAllProductsQuery();
+
+    const openDialog = (id: number) => {
+        setProductId(id);
+        setOpen(true);
+    };
+
+    const closeDialog = () => {
+        setOpen(false);
+    };
+
     return error ? (
         <>Something is Wrong</>
     ) : isLoading ? (
@@ -113,11 +130,17 @@ const Products = () => {
                                     className={classes.productCard}
                                 >
                                     <CardActionArea>
-                                        <CardMedia
-                                            component="img"
-                                            image={product.images[0].imageName}
-                                            alt={product.title}
-                                        />
+                                        <NavLink
+                                            to={`/boafresh-api-react-ts-reduxtoolkit/product/${product.id}`}
+                                        >
+                                            <CardMedia
+                                                component="img"
+                                                image={
+                                                    product.images[0].imageName
+                                                }
+                                                alt={product.title}
+                                            />
+                                        </NavLink>
                                     </CardActionArea>
                                     <CardContent>
                                         <Stack spacing={1}>
@@ -129,8 +152,8 @@ const Products = () => {
                                                 {product.title}
                                             </Typography>
                                             <Typography
-                                                variant="subtitle2"
-                                                color="text.disabled"
+                                                variant="subtitle1"
+                                                color="secondary"
                                                 component="div"
                                             >
                                                 Rs.{' '}
@@ -142,6 +165,7 @@ const Products = () => {
                                             <Button
                                                 size="small"
                                                 variant="contained"
+                                                onClick={()=>openDialog(product.id)}
                                             >
                                                 Add To Cart
                                             </Button>
@@ -152,6 +176,11 @@ const Products = () => {
                         );
                     })}
                 </Grid>
+                <CartDialog
+                    open={open}
+                    productId={productId}
+                    closeDialog={closeDialog}
+                />
             </Box>
         </Box>
     ) : (

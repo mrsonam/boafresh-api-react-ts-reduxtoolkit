@@ -1,4 +1,5 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import { cartApi } from '../services/cart';
 import { categoryApi } from '../services/category';
 import { homeApi } from '../services/home';
 import { productsApi } from '../services/products';
@@ -9,10 +10,11 @@ export const store = configureStore({
     [categoryApi.reducerPath]: categoryApi.reducer,
     [homeApi.reducerPath]: homeApi.reducer,
     [productsApi.reducerPath]: productsApi.reducer,
-    [userApi.reducerPath]: userApi.reducer
+    [userApi.reducerPath]: userApi.reducer,
+    [cartApi.reducerPath]: cartApi.reducer
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(categoryApi.middleware, homeApi.middleware, productsApi.middleware, userApi.middleware),
+    getDefaultMiddleware().concat(categoryApi.middleware, homeApi.middleware, productsApi.middleware, userApi.middleware, cartApi.middleware),
 });
 
 export type AppDispatch = typeof store.dispatch;

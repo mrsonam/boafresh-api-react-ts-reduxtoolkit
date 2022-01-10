@@ -1,3 +1,5 @@
+import { MetaLong, MetaShort } from "./constants";
+
 export interface Product {
     id: number;
     title: string;
@@ -49,23 +51,13 @@ export interface Product {
 }
 
 export interface ProductsResponse {
-    meta: {
-        copyright: string;
-        emails: string;
-        api: {
-            version: string;
-        };
-        category: null;
-        tag: null;
-        pagination: {
-            total: number;
-            count: number;
-            per_page: number;
-            current_page: number;
-            total_pages: number;
-            links: [];
-        };
-    };
+    meta: MetaLong;
     data: Product[];
+    code: number;
+}
+
+export interface ProductResponse {
+    meta: MetaShort;
+    data: Product;
     code: number;
 }

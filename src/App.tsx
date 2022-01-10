@@ -9,19 +9,27 @@ import SearchedProducts from './components/main-components/SearchedProducts';
 import CreateAccount from './components/main-components/CreateAccount';
 import Login from './components/main-components/Login';
 import Profile from './components/main-components/Profile';
+import Product from './components/main-components/Product';
+import Page404 from './components/main-components/Page404';
+import ForgotPassword from './components/main-components/ForgotPassword';
+import ChangePassword from './components/main-components/ChangePassword';
 
 const App: React.FC = (): JSX.Element => {
   return (
     <Router>
       <Header/>
       <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/products' element={<Products/>}/>
-        <Route path='/products/:searchQuery' element={<SearchedProducts/>}/>
-        <Route path='/products/category/:categoryId' element={<ProductsByCategory/>}/>
-        <Route path='/signup' element={<CreateAccount/>} />
-        <Route path='/login' element={<Login/>} />
-        <Route path='/profile' element={<Profile/>} />
+        <Route path='/boafresh-api-react-ts-reduxtoolkit' element={<Home/>}/>
+        <Route path='/boafresh-api-react-ts-reduxtoolkit/products' element={<Products/>}/>
+        <Route path='/boafresh-api-react-ts-reduxtoolkit/product/:productId' element={<Product/>}/>
+        <Route path='/boafresh-api-react-ts-reduxtoolkit/products/:searchQuery' element={<SearchedProducts/>}/>
+        <Route path='/boafresh-api-react-ts-reduxtoolkit/products/category/:categoryId' element={<ProductsByCategory/>}/>
+        <Route path='/boafresh-api-react-ts-reduxtoolkit/signup' element={<CreateAccount/>} />
+        <Route path='/boafresh-api-react-ts-reduxtoolkit/login' element={<Login/>} />
+        <Route path='/boafresh-api-react-ts-reduxtoolkit/profile' element={<Profile/>} />
+        <Route path='/boafresh-api-react-ts-reduxtoolkit/forgotPassword' element={<ForgotPassword/>} />
+        <Route path='/boafresh-api-react-ts-reduxtoolkit/changePassword' element={<ChangePassword/>} />
+        <Route path="*" element={<Page404/>} />
       </Routes>
       
     </Router>

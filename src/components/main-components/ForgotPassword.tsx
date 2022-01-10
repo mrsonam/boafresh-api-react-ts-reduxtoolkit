@@ -9,13 +9,13 @@ import {
     Button,
     Divider,
     InputAdornment,
-    FormControlLabel,
-    Checkbox,
+    Snackbar,
+    Alert,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { NavLink } from 'react-router-dom';
-import { EmailOutlined, PasswordOutlined } from '@mui/icons-material';
-import { useLoginUserMutation } from '../../services/user';
+import { EmailOutlined } from '@mui/icons-material';
+import { useForgotPasswordMutation } from '../../services/user';
 
 const useStyle = makeStyles({
     main: {
@@ -41,22 +41,13 @@ const useStyle = makeStyles({
     },
 });
 
-const Login : React.FC = (): JSX.Element => {
+const ForgotPassword: React.FC = (): JSX.Element => {
     const classes = useStyle();
 
-    const [input, setInput] = useState({
-        email: '',
-        password: ''
-    });
+    const [email, setEmail] = useState('');
+    const [open, setOpen] = useState(true);
 
-    const [loginUser, responseInfo] = useLoginUserMutation();
-    if (responseInfo.isSuccess) {
-        window.localStorage.setItem(
-            'token',
-            `"Bearer ${responseInfo.data.access_token}"`,
-        );
-        window.location.href = '/boafresh-api-react-ts-reduxtoolkit';
-    }
+    const [resetPassword, responseInfo] = useForgotPasswordMutation();
 
     return (
         <Box component="main" className={classes.main}>
@@ -68,9 +59,15 @@ const Login : React.FC = (): JSX.Element => {
                             component="div"
                             className={classes.heading}
                         >
-                            Login
+                            Forgot Password?
                         </Typography>
                         <Stack spacing={3}>
+                            <Typography variant="subtitle1">
+                                Lost your password? Please enter your email
+                                address. You will receive a link to create a new
+                                password via email.
+                            </Typography>
+                            <br />
                             <TextField
                                 type={'email'}
                                 label="Email Address"
@@ -82,43 +79,18 @@ const Login : React.FC = (): JSX.Element => {
                                         </InputAdornment>
                                     ),
                                 }}
-                                value={input.email}
-                                onChange={(e) => setInput({...input, email:(e.target.value)})}
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                             />
-                            <TextField
-                                type={'password'}
-                                label="Password"
-                                variant="outlined"
-                                InputProps={{
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-                                            <PasswordOutlined />
-                                        </InputAdornment>
-                                    ),
-                                }}
-                                value={input.password}
-                                onChange={(e) => setInput({...input, password:(e.target.value)})}
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        style={{ padding: 0, marginRight: 5 }}
-                                    />
-                                }
-                                label="Remember Me"
-                            />
-                            <NavLink to="/boafresh-api-react-ts-reduxtoolkit/forgotPassword">
-                                <Typography variant="subtitle1">
-                                    Forgot Password?
-                                </Typography>
-                            </NavLink>
                             <Button
                                 variant="contained"
                                 onClick={() => {
-                                    loginUser(input);
+                                    resetPassword(email);
+                                    setEmail('');
+                                    setOpen(open);
                                 }}
                             >
-                                Login
+                                Send Link
                             </Button>
                             <Divider />
                             <Box display={'flex'}>
@@ -135,6 +107,39 @@ const Login : React.FC = (): JSX.Element => {
                                 </NavLink>
                             </Box>
                         </Stack>
+                        {responseInfo.isSuccess ? (
+                            <Snackbar
+                                open={open}
+                                autoHideDuration={5000}
+                                onClose={() => setOpen(false)}
+                            >
+                                <Alert
+                                    severity="success"
+                                    sx={{ width: '100%' }}
+                                    onClose={() => setOpen(false)}
+                                >
+                                    Link to reset password has been <br /> sent
+                                    to {email}
+                                </Alert>
+                            </Snackbar>
+                        ) : responseInfo.isError ? (
+                            <Snackbar
+                                open={open}
+                                autoHideDuration={5000}
+                                onClose={() => setOpen(false)}
+                            >
+                                <Alert
+                                    severity="error"
+                                    sx={{ width: '100%' }}
+                                    onClose={() => setOpen(false)}
+                                >
+                                    The provided email does not exist in our
+                                    system.
+                                </Alert>
+                            </Snackbar>
+                        ) : (
+                            <></>
+                        )}
                     </CardContent>
                 </Card>
             </Box>
@@ -142,4 +147,4 @@ const Login : React.FC = (): JSX.Element => {
     );
 };
 
-export default Login;
+export default ForgotPassword;

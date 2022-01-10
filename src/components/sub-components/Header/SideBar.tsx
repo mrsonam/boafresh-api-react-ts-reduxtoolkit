@@ -11,8 +11,9 @@ import {
     Skeleton,
 } from '@mui/material';
 import { useGetAllCategoriesQuery } from '../../../services/category';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
+import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
 
 const useStyle = makeStyles({
     brandName: {
@@ -27,19 +28,40 @@ const useStyle = makeStyles({
             boxSizing: 'border-box',
         },
     },
+    list: {
+        padding: '0 20px',
+    },
+    link: {
+        backgroundImage: `url${'https://images.unsplash.com/photo-1606787366850-de6330128bfc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80'}`,
+        color: '#ee4238',
+        '&:hover': {
+            boxShadow: 'none',
+            color: '#ee4238',
+        },
+        '&:active': {
+            boxShadow: 'none',
+            color: '#ee4238',
+        },
+    },
 });
 
-const SideBar = () => {
+const SideBar: React.FC = (): JSX.Element => {
     const classes = useStyle();
+
+    const location = useLocation();
+
     const array = [1, 2, 3, 4, 5, 6];
+
     const { data, error, isLoading } = useGetAllCategoriesQuery();
+
     const token = localStorage.getItem('token');
+
     return error ? (
         <>Something is Wrong</>
     ) : (
         <Drawer className={classes.sideBar} variant="permanent" anchor="left">
             <Toolbar>
-                <NavLink to="/">
+                <NavLink to="/boafresh-api-react-ts-reduxtoolkit">
                     <Box display={'flex'} className={classes.brandName}>
                         <Typography
                             color="primary"
@@ -70,16 +92,31 @@ const SideBar = () => {
                 </NavLink>
             </Toolbar>
             <List
+                className={classes.list}
                 aria-labelledby="categories-subheader"
                 subheader={
-                    <ListSubheader component="div" id="categories-subheader">
+                    <ListSubheader component="div" style={{ fontSize: '12px' }}>
                         Product Categories
                     </ListSubheader>
                 }
             >
-                <NavLink to="/products">
-                    <ListItem button key="products">
+                <NavLink to="/boafresh-api-react-ts-reduxtoolkit/products">
+                    <ListItem
+                        selected={
+                            location.pathname ===
+                            '/boafresh-api-react-ts-reduxtoolkit/products'
+                        }
+                        button
+                        key="products"
+                        classes={{ selected: classes.link }}
+                    >
                         <ListItemText primary="All Products" />
+                        {location.pathname ===
+                        '/boafresh-api-react-ts-reduxtoolkit/products' ? (
+                            <ChevronRightOutlinedIcon />
+                        ) : (
+                            <></>
+                        )}
                     </ListItem>
                 </NavLink>
 
@@ -103,10 +140,18 @@ const SideBar = () => {
                     data.data.map((category) => {
                         return (
                             <NavLink
-                                to={`/products/category/${category.id}`}
+                                to={`/boafresh-api-react-ts-reduxtoolkit/products/category/${category.id}`}
                                 key={category.id}
                             >
-                                <ListItem button key={category.title}>
+                                <ListItem
+                                    selected={
+                                        location.pathname ===
+                                        `/boafresh-api-react-ts-reduxtoolkit/products/category/${category.id}`
+                                    }
+                                    button
+                                    key={category.title}
+                                    classes={{ selected: classes.link }}
+                                >
                                     <ListItemText
                                         primary={category.title
                                             .split(' ')
@@ -120,6 +165,12 @@ const SideBar = () => {
                                                 );
                                             })}
                                     />
+                                    {location.pathname ===
+                                    `/boafresh-api-react-ts-reduxtoolkit/products/category/${category.id}` ? (
+                                        <ChevronRightOutlinedIcon />
+                                    ) : (
+                                        <></>
+                                    )}
                                 </ListItem>
                             </NavLink>
                         );
@@ -129,36 +180,85 @@ const SideBar = () => {
                 )}
             </List>
             <List
+                className={classes.list}
                 aria-labelledby="categories-subheader"
                 subheader={
-                    <ListSubheader component="div" id="categories-subheader">
+                    <ListSubheader component="div" style={{ fontSize: '12px' }}>
                         Accounts
                     </ListSubheader>
                 }
             >
                 {token !== null ? (
                     <>
-                        <NavLink to="/profile">
-                            <ListItem button>
+                        <NavLink to="/boafresh-api-react-ts-reduxtoolkit/profile">
+                            <ListItem
+                                selected={location.pathname === '/boafresh-api-react-ts-reduxtoolkit/profile'}
+                                button
+                                classes={{ selected: classes.link }}
+                            >
                                 <ListItemText primary="Profile" />
+                                {location.pathname === '/boafresh-api-react-ts-reduxtoolkit/profile' ? (
+                                    <ChevronRightOutlinedIcon />
+                                ) : (
+                                    <></>
+                                )}
                             </ListItem>
                         </NavLink>
-                        <NavLink to="/">
-                            <ListItem button onClick={() => localStorage.removeItem('token')}>
-                                <ListItemText primary="Logout" />
+                        <NavLink to="/boafresh-api-react-ts-reduxtoolkit/changePassword">
+                            <ListItem
+                                selected={location.pathname === '/boafresh-api-react-ts-reduxtoolkit/changePassword'}
+                                button
+                                classes={{ selected: classes.link }}
+                            >
+                                <ListItemText primary="Change Password" />
+                                {location.pathname === '/boafresh-api-react-ts-reduxtoolkit/changePassword' ? (
+                                    <ChevronRightOutlinedIcon />
+                                ) : (
+                                    <></>
+                                )}
                             </ListItem>
                         </NavLink>
+                        <ListItem
+                            classes={{ selected: classes.link }}
+                            button
+                            onClick={() => {
+                                localStorage.removeItem('token');
+                                window.location.href = './';
+                            }}
+                        >
+                            <ListItemText primary="Logout" />
+                        </ListItem>
                     </>
                 ) : (
                     <>
-                        <NavLink to="/signup">
-                            <ListItem button key="signup">
+                        <NavLink to="/boafresh-api-react-ts-reduxtoolkit/signup">
+                            <ListItem
+                                selected={location.pathname === '/signup'}
+                                button
+                                key="signup"
+                                classes={{ selected: classes.link }}
+                            >
                                 <ListItemText primary="Create Account" />
+                                {location.pathname === '/signup' ? (
+                                    <ChevronRightOutlinedIcon />
+                                ) : (
+                                    <></>
+                                )}
                             </ListItem>
                         </NavLink>
-                        <NavLink to="/login">
-                            <ListItem button key="login">
+                        <NavLink to="/boafresh-api-react-ts-reduxtoolkit/login">
+                            <ListItem
+                                selected={location.pathname === '/login'}
+                                button
+                                key="login"
+                                classes={{ selected: classes.link }}
+                            >
                                 <ListItemText primary="Login" />
+                                {location.pathname === '/login' ? (
+                                    <ChevronRightOutlinedIcon />
+                                ) : (
+                                    <></>
+                                )}
                             </ListItem>
                         </NavLink>
                     </>

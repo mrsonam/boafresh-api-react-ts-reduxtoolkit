@@ -15,10 +15,13 @@ import {
     LoginUserSuccessResponse,
     UserProfileResponse,
     UpdateProfileBody,
+    ForgotPasswordResponse,
+    ChangePasswordResponse,
+    ChangePasswordBody,
 } from '../types/user';
 let token = '';
-if(localStorage.getItem('token') !== null){
-    token= JSON.parse(localStorage.getItem('token') || '');
+if (localStorage.getItem('token') !== null) {
+    token = JSON.parse(localStorage.getItem('token') || '');
 }
 // Define a service using a base URL and expected endpoints
 export const userApi = createApi({
@@ -63,6 +66,15 @@ export const userApi = createApi({
                 },
             }),
         }),
+        forgotPassword: builder.mutation<ForgotPasswordResponse, string>({
+            query: (email) => ({
+                url: `api/v4/auth/forgot-password`,
+                method: 'POST',
+                body: {
+                    email: email,
+                },
+            }),
+        }),
         getUserProfile: builder.query<UserProfileResponse, void>({
             query: () => ({
                 url: `api/v4/profile/show`,
@@ -82,6 +94,20 @@ export const userApi = createApi({
                 }),
             }),
         }),
+        changePassword: builder.mutation<
+            ChangePasswordResponse,
+            ChangePasswordBody
+        >({
+            query: ({ oldPassword, newPassword, confirmPassword }) => ({
+                url: 'api/v4/profile/change-password',
+                method: 'POST',
+                body: JSON.stringify({
+                    'old-password': oldPassword,
+                    'new-password': newPassword,
+                    'confirm-password': confirmPassword,
+                }),
+            }),
+        }),
     }),
 });
 
@@ -92,4 +118,6 @@ export const {
     useLoginUserMutation,
     useGetUserProfileQuery,
     useUpdateUserProfileMutation,
+    useForgotPasswordMutation,
+    useChangePasswordMutation,
 } = userApi;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Box,
     Typography,
@@ -8,7 +8,7 @@ import {
     InputAdornment,
     Avatar,
     Snackbar,
-    Alert
+    Alert,
 } from '@mui/material';
 import {
     AccountBoxOutlined,
@@ -47,9 +47,17 @@ const Profile: React.FC = (): JSX.Element => {
     const [phone, setPhone] = useState(data ? data.data.mobileNumber : '');
     const [image, setImage] = useState(data ? data.data.image : '');
 
-    const [updateUserProfile, responseInfo] = useUpdateUserProfileMutation();
-    console.log(responseInfo)
+    const [open, setOpen] = useState(true);
 
+    const [updateUserProfile, responseInfo] = useUpdateUserProfileMutation();
+
+    useEffect(() => {
+        setFirstName(data ? data.data.firstName : '');
+        setLastName(data ? data.data.lastName : '');
+        setEmail(data ? data.data.email : '');
+        setPhone(data ? data.data.mobileNumber : '');
+        setImage(data ? data.data.image : '');
+    }, [data]);
     return error ? (
         <>Something is Wrong!</>
     ) : (
@@ -139,22 +147,45 @@ const Profile: React.FC = (): JSX.Element => {
                                 variant="contained"
                                 onClick={() => {
                                     updateUserProfile({ firstName, lastName });
+                                    setOpen(true);
+                                    setTimeout(window.location.reload, 100);
                                 }}
                             >
                                 Update
                             </Button>
                         </Stack>
-                        {responseInfo.isSuccess ? <Snackbar
-                    open={true}
-                    autoHideDuration={1}
-                >
-                    <Alert
-                        severity="success"
-                        sx={{ width: '100%' }}
-                    >
-                        Profile Updated Successfuly
-                    </Alert>
-                </Snackbar> : <></>}
+                        {responseInfo.isSuccess ? (
+                            <Snackbar
+                                open={open}
+                                autoHideDuration={5000}
+                                onClose={() => setOpen(false)}
+                            >
+                                <Alert
+                                    severity="success"
+                                    sx={{ width: '100%' }}
+                                    onClose={() => setOpen(false)}
+                                >
+                                    Profile Updated Successfuly
+                                </Alert>
+                            </Snackbar>
+                        ) : responseInfo.isError ? (
+                            <Snackbar
+                                open={open}
+                                autoHideDuration={5000}
+                                onClose={() => setOpen(false)}
+                            >
+                                <Alert
+                                    severity="error"
+                                    sx={{ width: '100%' }}
+                                    onClose={() => setOpen(false)}
+                                >
+                                    Something went wrong while updating your
+                                    Profile
+                                </Alert>
+                            </Snackbar>
+                        ) : (
+                            <></>
+                        )}
                     </Box>
                 )}
             </Box>

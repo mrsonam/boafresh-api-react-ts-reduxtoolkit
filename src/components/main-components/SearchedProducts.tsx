@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useGetSearchedProductsQuery } from '../../services/products';
 import {
     Box,
@@ -12,8 +12,9 @@ import {
     Stack,
     Skeleton,
 } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
+import CartDialog from '../sub-components/Cart/CartDialog';
 
 const useStyle = makeStyles({
     heading: {
@@ -32,13 +33,29 @@ const useStyle = makeStyles({
     },
 });
 
-const SearchedProducts = () => {
+const SearchedProducts: React.FC = (): JSX.Element => {
+    const [open, setOpen] = useState(false);
+    const [productId, setProductId] = useState(0);
+
     const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
     const classes = useStyle();
+
     const { searchQuery } = useParams<Record<string, string | undefined>>();
+
     const { data, error, isLoading } = useGetSearchedProductsQuery(
         searchQuery || '',
     );
+
+    const openDialog = (id: number) => {
+        setProductId(id);
+        setOpen(true);
+    };
+
+    const closeDialog = () => {
+        setOpen(false);
+    };
+
     return error ? (
         <>Something is Wrong</>
     ) : isLoading ? (
@@ -119,11 +136,17 @@ const SearchedProducts = () => {
                                     className={classes.productCard}
                                 >
                                     <CardActionArea>
-                                        <CardMedia
-                                            component="img"
-                                            image={product.images[0].imageName}
-                                            alt={product.title}
-                                        />
+                                        <NavLink
+                                            to={`/boafresh-api-react-ts-reduxtoolkit/product/${product.id}`}
+                                        >
+                                            <CardMedia
+                                                component="img"
+                                                image={
+                                                    product.images[0].imageName
+                                                }
+                                                alt={product.title}
+                                            />
+                                        </NavLink>
                                     </CardActionArea>
                                     <CardContent>
                                         <Stack spacing={1}>
@@ -135,8 +158,8 @@ const SearchedProducts = () => {
                                                 {product.title}
                                             </Typography>
                                             <Typography
-                                                variant="subtitle2"
-                                                color="text.disabled"
+                                                variant="subtitle1"
+                                                color="secondary"
                                                 component="div"
                                             >
                                                 Rs.{' '}
@@ -148,6 +171,7 @@ const SearchedProducts = () => {
                                             <Button
                                                 size="small"
                                                 variant="contained"
+                                                onClick={()=>openDialog(product.id)}
                                             >
                                                 Add To Cart
                                             </Button>
@@ -158,6 +182,11 @@ const SearchedProducts = () => {
                         );
                     })}
                 </Grid>
+                <CartDialog
+                    open={open}
+                    productId={productId}
+                    closeDialog={closeDialog}
+                />
             </Box>
         </Box>
     ) : (

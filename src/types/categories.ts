@@ -1,3 +1,5 @@
+import { MetaLong } from "./constants";
+
 //Categories
 export interface SubCategories {
     id: number;
@@ -55,24 +57,7 @@ export interface Category {
 }
 
 export interface CategoryResponse {
-    meta: {
-        copyright: string;
-        emails: string;
-        api: {
-            version: string;
-        };
-        banners: [];
-        pagination: {
-            total: number;
-            count: number;
-            per_page: number;
-            current_page: number;
-            total_pages: number;
-            links: [];
-        };
-    };
+    meta: MetaLong;
     data: Category[];
     code: number;
 }
-
-//Home

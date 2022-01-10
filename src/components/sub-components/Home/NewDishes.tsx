@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
     Box,
     Card,
@@ -14,6 +14,8 @@ import {
 import { useGetHomeQuery } from '../../../services/home';
 import { makeStyles } from '@mui/styles';
 import { Product } from '../../../types/products';
+import { NavLink } from 'react-router-dom';
+import CartDialog from '../Cart/CartDialog';
 
 const useStyle = makeStyles({
     heading: {
@@ -24,10 +26,26 @@ const useStyle = makeStyles({
     },
 });
 
+
 const NewDishes = () => {
+    const [open, setOpen] = useState(false);
+    const [productId, setProductId] = useState(0);
+
     const array = [1, 2, 3, 4, 5, 6];
+
     const classes = useStyle();
+
     const { data, error, isLoading } = useGetHomeQuery();
+
+    const openDialog = (id: number) => {
+        setProductId(id);
+        setOpen(true);
+    };
+
+    const closeDialog = () => {
+        setOpen(false);
+    };
+
     return error ? (
         <>Something is Wrong</>
     ) : isLoading ? (
@@ -82,6 +100,7 @@ const NewDishes = () => {
             >
                 {data.data[4].sectionDetails.title}
             </Typography>
+
             <Grid container spacing={5}>
                 {(data.data[4].sectionDetails.products as Product[]).map(
                     (product: Product) => {
@@ -92,12 +111,16 @@ const NewDishes = () => {
                                     className="productCard"
                                 >
                                     <CardActionArea>
-                                        <CardMedia
-                                            className="categoryImage"
-                                            component="img"
-                                            image={product.images[0].imageName}
-                                            alt={product.title}
-                                        />
+                                        <NavLink to={`/boafresh-api-react-ts-reduxtoolkit/product/${product.id}`}>
+                                            <CardMedia
+                                                className="categoryImage"
+                                                component="img"
+                                                image={
+                                                    product.images[0].imageName
+                                                }
+                                                alt={product.title}
+                                            />
+                                        </NavLink>
                                     </CardActionArea>
                                     <CardContent className="productText">
                                         <Stack spacing={1}>
@@ -109,8 +132,8 @@ const NewDishes = () => {
                                                 {product.title}
                                             </Typography>
                                             <Typography
-                                                variant="subtitle2"
-                                                color="text.disabled"
+                                                variant="subtitle1"
+                                                color="secondary"
                                                 component="div"
                                             >
                                                 Rs.{' '}
@@ -122,6 +145,7 @@ const NewDishes = () => {
                                             <Button
                                                 size="small"
                                                 variant="contained"
+                                                onClick={()=>openDialog(product.id)}
                                             >
                                                 Add To Cart
                                             </Button>
@@ -133,6 +157,11 @@ const NewDishes = () => {
                     },
                 )}
             </Grid>
+            <CartDialog
+                    open={open}
+                    productId={productId}
+                    closeDialog={closeDialog}
+                />
         </Box>
     ) : (
         <></>

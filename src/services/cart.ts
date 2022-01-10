@@ -1,0 +1,46 @@
+// Need to use the React-specific entry point to import createApi
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { baseURL, warehouseId, apiKey } from '../apiConstants';
+import { AddToCartResponse, CartBody, GetCartResponse } from '../types/cart';
+let token = '';
+if (localStorage.getItem('token') !== null) {
+    token = JSON.parse(localStorage.getItem('token') || '');
+}
+
+// Define a service using a base URL and expected endpoints
+export const cartApi = createApi({
+    reducerPath: 'cartApi',
+    baseQuery: fetchBaseQuery({
+        baseUrl: baseURL,
+        prepareHeaders: (headers) => {
+            headers.set('Warehouse-Id', warehouseId);
+            headers.set('Api-key', apiKey);
+            headers.set('Authorization', token);
+            return headers;
+        },
+    }),
+    endpoints: (builder) => ({
+        addToCart: builder.mutation<AddToCartResponse, CartBody>({
+            query: ({ productId, priceId, quantity, note }) => ({
+                url: 'api/v4/cart-product',
+                method: 'POST',
+                body: {
+                    productId: productId,
+                    priceId: priceId,
+                    quantity: quantity,
+                    note: note,
+                },
+            }),
+        }),
+        getCart: builder.query<GetCartResponse, void>({
+            query: () => ({
+                url: 'api/v4/cart',
+                method: 'GET',
+            }),
+        }),
+    }),
+});
+
+// Export hooks for usage in functional components, which are
+// auto-generated based on the defined endpoints
+export const { useAddToCartMutation, useGetCartQuery } = cartApi;

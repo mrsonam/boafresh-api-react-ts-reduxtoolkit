@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
     Box,
     Card,
@@ -10,9 +11,10 @@ import {
     Stack,
     Skeleton,
 } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import { useGetProductsByCategoryQuery } from '../../services/products';
 import { makeStyles } from '@mui/styles';
+import CartDialog from '../sub-components/Cart/CartDialog';
 
 const useStyle = makeStyles({
     heading: {
@@ -31,13 +33,28 @@ const useStyle = makeStyles({
     },
 });
 
-const ProductsByCategory = () => {
+const ProductsByCategory : React.FC = (): JSX.Element => {
+    const [open, setOpen] = useState(false);
+    const [productId, setProductId] = useState(0);
+
     const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
     const classes = useStyle();
+
     const { categoryId } = useParams<Record<string, string | undefined>>();
+
     const { data, error, isLoading } = useGetProductsByCategoryQuery(
         categoryId || '',
     );
+
+    const openDialog = (id: number) => {
+        setProductId(id);
+        setOpen(true);
+    };
+
+    const closeDialog = () => {
+        setOpen(false);
+    };
 
     return error ? (
         <>Something is Wrong</>
@@ -121,17 +138,21 @@ const ProductsByCategory = () => {
                 <Grid container spacing={5}>
                     {data.data.map((product) => {
                         return (
-                            <Grid item xs={2.4} key={product.id}> 
+                            <Grid item xs={2.4} key={product.id}>
                                 <Card
                                     sx={{ borderRadius: '20px' }}
                                     className={classes.productCard}
                                 >
                                     <CardActionArea>
-                                        <CardMedia
-                                            component="img"
-                                            image={product.images[0].imageName}
-                                            alt={product.title}
-                                        />
+                                        <NavLink to={`/boafresh-api-react-ts-reduxtoolkit/product/${product.id}`}>
+                                            <CardMedia
+                                                component="img"
+                                                image={
+                                                    product.images[0].imageName
+                                                }
+                                                alt={product.title}
+                                            />
+                                        </NavLink>
                                     </CardActionArea>
                                     <CardContent>
                                         <Stack spacing={1}>
@@ -143,8 +164,8 @@ const ProductsByCategory = () => {
                                                 {product.title}
                                             </Typography>
                                             <Typography
-                                                variant="subtitle2"
-                                                color="text.disabled"
+                                                variant="subtitle1"
+                                                color="secondary"
                                                 component="div"
                                             >
                                                 Rs.{' '}
@@ -156,6 +177,7 @@ const ProductsByCategory = () => {
                                             <Button
                                                 size="small"
                                                 variant="contained"
+                                                onClick={()=>openDialog(product.id)}
                                             >
                                                 Add To Cart
                                             </Button>
@@ -166,6 +188,11 @@ const ProductsByCategory = () => {
                         );
                     })}
                 </Grid>
+                <CartDialog
+                    open={open}
+                    productId={productId}
+                    closeDialog={closeDialog}
+                />
             </Box>
         </Box>
     ) : (

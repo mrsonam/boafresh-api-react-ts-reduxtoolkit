@@ -83,7 +83,7 @@ const Categories = () => {
                         return (
                             <Grid item xs={4} key={category.id}>
                                 <NavLink
-                                    to={`./products/category/${category.id}`}
+                                    to={`/boafresh-api-react-ts-reduxtoolkit/products/category/${category.id}`}
                                 >
                                     <Card className={classes.categoryCard}>
                                         <CardActionArea>
