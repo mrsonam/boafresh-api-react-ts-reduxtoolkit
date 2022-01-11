@@ -16,6 +16,7 @@ import { makeStyles } from '@mui/styles';
 import { NavLink } from 'react-router-dom';
 import { EmailOutlined, PasswordOutlined } from '@mui/icons-material';
 import { useLoginUserMutation } from '../../services/user';
+import { useForm } from 'react-hook-form';
 
 const useStyle = makeStyles({
     main: {
@@ -30,7 +31,7 @@ const useStyle = makeStyles({
         marginBottom: '30px',
         textAlign: 'center',
     },
-    productCard: {
+    formCard: {
         height: '100%',
         borderRadius: '25px',
         padding: '0 50px 50px',
@@ -41,12 +42,18 @@ const useStyle = makeStyles({
     },
 });
 
-const Login : React.FC = (): JSX.Element => {
+const Login: React.FC = (): JSX.Element => {
     const classes = useStyle();
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
 
     const [input, setInput] = useState({
         email: '',
-        password: ''
+        password: '',
     });
 
     const [loginUser, responseInfo] = useLoginUserMutation();
@@ -61,7 +68,7 @@ const Login : React.FC = (): JSX.Element => {
     return (
         <Box component="main" className={classes.main}>
             <Box className={classes.home}>
-                <Card className={classes.productCard}>
+                <Card className={classes.formCard}>
                     <CardContent style={{ marginLeft: '50%' }}>
                         <Typography
                             variant="h4"
@@ -71,55 +78,100 @@ const Login : React.FC = (): JSX.Element => {
                             Login
                         </Typography>
                         <Stack spacing={3}>
-                            <TextField
-                                type={'email'}
-                                label="Email Address"
-                                variant="outlined"
-                                InputProps={{
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-                                            <EmailOutlined />
-                                        </InputAdornment>
-                                    ),
-                                }}
-                                value={input.email}
-                                onChange={(e) => setInput({...input, email:(e.target.value)})}
-                            />
-                            <TextField
-                                type={'password'}
-                                label="Password"
-                                variant="outlined"
-                                InputProps={{
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-                                            <PasswordOutlined />
-                                        </InputAdornment>
-                                    ),
-                                }}
-                                value={input.password}
-                                onChange={(e) => setInput({...input, password:(e.target.value)})}
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        style={{ padding: 0, marginRight: 5 }}
-                                    />
-                                }
-                                label="Remember Me"
-                            />
-                            <NavLink to="/boafresh-api-react-ts-reduxtoolkit/forgotPassword">
-                                <Typography variant="subtitle1">
-                                    Forgot Password?
-                                </Typography>
-                            </NavLink>
-                            <Button
-                                variant="contained"
-                                onClick={() => {
+                            <form
+                                onSubmit={handleSubmit(() => {
                                     loginUser(input);
-                                }}
+                                })}
                             >
-                                Login
-                            </Button>
+                                <Stack spacing={2}>
+                                    <TextField
+                                        {...register('email', {
+                                            required: 'Email cannot be empty',
+                                            pattern: {
+                                                value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                                                message:
+                                                    'Invalid Email Address',
+                                            },
+                                        })}
+                                        type={'text'}
+                                        label="Email Address"
+                                        variant="outlined"
+                                        InputProps={{
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <EmailOutlined />
+                                                </InputAdornment>
+                                            ),
+                                        }}
+                                        value={input.email}
+                                        onChange={(e) =>
+                                            setInput({
+                                                ...input,
+                                                email: e.target.value,
+                                            })
+                                        }
+                                    />
+                                    <Typography
+                                        color={'error'}
+                                        variant="subtitle2"
+                                    >
+                                        {errors.email?.message}
+                                    </Typography>
+                                    <TextField
+                                        {...register('password', {
+                                            required:
+                                                'Password cannot be empty',
+                                            minLength: {
+                                                value: 8,
+                                                message:
+                                                    'Password must be atleast 8 characters long',
+                                            },
+                                        })}
+                                        type={'password'}
+                                        label="Password"
+                                        variant="outlined"
+                                        InputProps={{
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <PasswordOutlined />
+                                                </InputAdornment>
+                                            ),
+                                        }}
+                                        value={input.password}
+                                        onChange={(e) =>
+                                            setInput({
+                                                ...input,
+                                                password: e.target.value,
+                                            })
+                                        }
+                                    />
+                                    <Typography
+                                        color={'error'}
+                                        variant="subtitle2"
+                                    >
+                                        {errors.password?.message}
+                                    </Typography>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                style={{
+                                                    padding: 0,
+                                                    marginRight: 5,
+                                                }}
+                                            />
+                                        }
+                                        label="Remember Me"
+                                    />
+                                    <NavLink to="/boafresh-api-react-ts-reduxtoolkit/forgotPassword">
+                                        <Typography variant="subtitle1">
+                                            Forgot Password?
+                                        </Typography>
+                                    </NavLink>
+                                    <Button variant="contained" type="submit">
+                                        Login
+                                    </Button>
+                                </Stack>
+                            </form>
                             <Divider />
                             <Box display={'flex'}>
                                 <Typography variant="subtitle1">

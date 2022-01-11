@@ -233,13 +233,13 @@ const SideBar: React.FC = (): JSX.Element => {
                     <>
                         <NavLink to="/boafresh-api-react-ts-reduxtoolkit/signup">
                             <ListItem
-                                selected={location.pathname === '/signup'}
+                                selected={location.pathname === '/boafresh-api-react-ts-reduxtoolkit/signup'}
                                 button
                                 key="signup"
                                 classes={{ selected: classes.link }}
                             >
                                 <ListItemText primary="Create Account" />
-                                {location.pathname === '/signup' ? (
+                                {location.pathname === '/boafresh-api-react-ts-reduxtoolkit/signup' ? (
                                     <ChevronRightOutlinedIcon />
                                 ) : (
                                     <></>
@@ -248,13 +248,13 @@ const SideBar: React.FC = (): JSX.Element => {
                         </NavLink>
                         <NavLink to="/boafresh-api-react-ts-reduxtoolkit/login">
                             <ListItem
-                                selected={location.pathname === '/login'}
+                                selected={location.pathname === '/boafresh-api-react-ts-reduxtoolkit/login'}
                                 button
                                 key="login"
                                 classes={{ selected: classes.link }}
                             >
                                 <ListItemText primary="Login" />
-                                {location.pathname === '/login' ? (
+                                {location.pathname === '/boafresh-api-react-ts-reduxtoolkit/login' ? (
                                     <ChevronRightOutlinedIcon />
                                 ) : (
                                     <></>

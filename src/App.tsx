@@ -13,6 +13,7 @@ import Product from './components/main-components/Product';
 import Page404 from './components/main-components/Page404';
 import ForgotPassword from './components/main-components/ForgotPassword';
 import ChangePassword from './components/main-components/ChangePassword';
+import Cart from './components/main-components/Cart';
 
 const App: React.FC = (): JSX.Element => {
   return (
@@ -29,6 +30,7 @@ const App: React.FC = (): JSX.Element => {
         <Route path='/boafresh-api-react-ts-reduxtoolkit/profile' element={<Profile/>} />
         <Route path='/boafresh-api-react-ts-reduxtoolkit/forgotPassword' element={<ForgotPassword/>} />
         <Route path='/boafresh-api-react-ts-reduxtoolkit/changePassword' element={<ChangePassword/>} />
+        <Route path='/boafresh-api-react-ts-reduxtoolkit/cart' element={<Cart/>} />
         <Route path="*" element={<Page404/>} />
       </Routes>
       

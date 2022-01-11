@@ -16,6 +16,7 @@ import { makeStyles } from '@mui/styles';
 import { NavLink } from 'react-router-dom';
 import { EmailOutlined } from '@mui/icons-material';
 import { useForgotPasswordMutation } from '../../services/user';
+import { useForm } from 'react-hook-form';
 
 const useStyle = makeStyles({
     main: {
@@ -30,7 +31,7 @@ const useStyle = makeStyles({
         marginBottom: '30px',
         textAlign: 'center',
     },
-    productCard: {
+    formCard: {
         height: '100%',
         borderRadius: '25px',
         padding: '0 50px 50px',
@@ -44,6 +45,12 @@ const useStyle = makeStyles({
 const ForgotPassword: React.FC = (): JSX.Element => {
     const classes = useStyle();
 
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
+
     const [email, setEmail] = useState('');
     const [open, setOpen] = useState(true);
 
@@ -52,7 +59,7 @@ const ForgotPassword: React.FC = (): JSX.Element => {
     return (
         <Box component="main" className={classes.main}>
             <Box className={classes.home}>
-                <Card className={classes.productCard}>
+                <Card className={classes.formCard}>
                     <CardContent style={{ marginLeft: '50%' }}>
                         <Typography
                             variant="h4"
@@ -68,30 +75,57 @@ const ForgotPassword: React.FC = (): JSX.Element => {
                                 password via email.
                             </Typography>
                             <br />
-                            <TextField
-                                type={'email'}
-                                label="Email Address"
-                                variant="outlined"
-                                InputProps={{
-                                    startAdornment: (
-                                        <InputAdornment position="start">
-                                            <EmailOutlined />
-                                        </InputAdornment>
-                                    ),
-                                }}
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                            <Button
-                                variant="contained"
-                                onClick={() => {
+                            <form
+                                onSubmit={handleSubmit(() => {
                                     resetPassword(email);
                                     setEmail('');
                                     setOpen(open);
-                                }}
+                                })}
                             >
-                                Send Link
-                            </Button>
+                                <Stack spacing={2}>
+                                    <TextField
+                                        {...register('email', {
+                                            required: 'Email cannot be empty',
+                                            pattern: {
+                                                value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                                                message:
+                                                    'Invalid Email Address',
+                                            },
+                                        })}
+                                        type={'text'}
+                                        label="Email Address"
+                                        variant="outlined"
+                                        InputProps={{
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <EmailOutlined />
+                                                </InputAdornment>
+                                            ),
+                                        }}
+                                        value={email}
+                                        onChange={(e) =>
+                                            setEmail(e.target.value)
+                                        }
+                                    />
+                                    <Typography
+                                        color={'error'}
+                                        variant="subtitle2"
+                                    >
+                                        {errors.email?.message}
+                                    </Typography>
+                                    <Button
+                                        type="submit"
+                                        variant="contained"
+                                        // onClick={() => {
+                                        //     resetPassword(email);
+                                        //     setEmail('');
+                                        //     setOpen(open);
+                                        // }}
+                                    >
+                                        Send Link
+                                    </Button>
+                                </Stack>
+                            </form>
                             <Divider />
                             <Box display={'flex'}>
                                 <Typography variant="subtitle1">
