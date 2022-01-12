@@ -16,7 +16,7 @@ interface SelectedUnit {
     alwaysAvailable: boolean;
 }
 
-interface CartProductData {
+export interface CartProductData {
     id: number;
     price: number;
     quantity: number;
@@ -38,13 +38,18 @@ export interface CartBody {
     note: string;
 }
 
+export interface UpdateCartBody {
+    cartId: number;
+    quantity: number;
+}
+
 interface Extra {
     title: string;
     value: number;
 }
 
-interface GetCartData {
-    id: 1852;
+export interface GetCartData {
+    id: number;
     cartNumber: string;
     categoryId: null;
     warehouseId: number;
@@ -58,7 +63,7 @@ interface GetCartData {
     campaign_message: string;
     total: number;
     pickupTotal: number;
-    cartProducts: CartProductData[];
+    cartProducts: CartProductData[] | [];
 };
 
 interface GetCartSuccessResponse {

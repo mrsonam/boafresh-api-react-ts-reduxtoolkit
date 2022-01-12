@@ -122,15 +122,15 @@ const TopBar: React.FC = (): JSX.Element => {
                 <IconButton
                     className="cartIcon"
                     size="large"
-                    aria-label="menu"
                     sx={{ mr: 2 }}
                 >
+                    <NavLink to='/boafresh-api-react-ts-reduxtoolkit/cart'>
                     <Badge badgeContent={totalItems} color="secondary" showZero>
                         <ShoppingCartOutlined
                             fontSize="large"
                             color="primary"
                         />
-                    </Badge>
+                    </Badge></NavLink>
                 </IconButton>
                 {token !== null ? (
                     <Stack direction="row" spacing={2}>

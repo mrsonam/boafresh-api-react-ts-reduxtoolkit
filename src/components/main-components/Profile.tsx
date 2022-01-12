@@ -58,6 +58,14 @@ const Profile: React.FC = (): JSX.Element => {
         setPhone(data ? data.data.mobileNumber : '');
         setImage(data ? data.data.image : '');
     }, [data]);
+
+    const handleUpdateProfile = () => {
+        updateUserProfile({ firstName, lastName });
+        setOpen(true);
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
+    };
     return error ? (
         <>Something is Wrong!</>
     ) : (
@@ -145,11 +153,7 @@ const Profile: React.FC = (): JSX.Element => {
                             />
                             <Button
                                 variant="contained"
-                                onClick={() => {
-                                    updateUserProfile({ firstName, lastName });
-                                    setOpen(true);
-                                    setTimeout(window.location.reload, 100);
-                                }}
+                                onClick={handleUpdateProfile}
                             >
                                 Update
                             </Button>

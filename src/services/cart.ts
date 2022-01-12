@@ -1,7 +1,7 @@
 // Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { baseURL, warehouseId, apiKey } from '../apiConstants';
-import { AddToCartResponse, CartBody, GetCartResponse } from '../types/cart';
+import { AddToCartResponse, CartBody, GetCartResponse, UpdateCartBody } from '../types/cart';
 let token = '';
 if (localStorage.getItem('token') !== null) {
     token = JSON.parse(localStorage.getItem('token') || '');
@@ -32,6 +32,27 @@ export const cartApi = createApi({
                 },
             }),
         }),
+        updateCart: builder.mutation<AddToCartResponse, UpdateCartBody>({
+            query: ({ cartId, quantity }) => ({
+                url: `api/v4/cart-product/${cartId}`,
+                method: 'PATCH',
+                body: {
+                    quantity: quantity,
+                },
+            }),
+        }),
+        deleteCartItem: builder.mutation<AddToCartResponse, number>({
+            query: (cartId) => ({
+                url: `api/v4/cart-product/${cartId}`,
+                method: 'DELETE',
+            }),
+        }),
+        deleteCart: builder.mutation<void, void>({
+            query: () => ({
+                url: `api/v4/cart`,
+                method: 'DELETE',
+            }),
+        }),
         getCart: builder.query<GetCartResponse, void>({
             query: () => ({
                 url: 'api/v4/cart',
@@ -43,4 +64,4 @@ export const cartApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useAddToCartMutation, useGetCartQuery } = cartApi;
+export const { useAddToCartMutation, useGetCartQuery, useUpdateCartMutation, useDeleteCartItemMutation, useDeleteCartMutation } = cartApi;
