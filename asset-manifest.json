@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/boafresh-api-react-ts-reduxtoolkit/static/css/main.4325cce1.css",
-    "main.js": "/boafresh-api-react-ts-reduxtoolkit/static/js/main.50eb126d.js",
+    "main.js": "/boafresh-api-react-ts-reduxtoolkit/static/js/main.cec18c19.js",
     "index.html": "/boafresh-api-react-ts-reduxtoolkit/index.html",
     "main.4325cce1.css.map": "/boafresh-api-react-ts-reduxtoolkit/static/css/main.4325cce1.css.map",
-    "main.50eb126d.js.map": "/boafresh-api-react-ts-reduxtoolkit/static/js/main.50eb126d.js.map"
+    "main.cec18c19.js.map": "/boafresh-api-react-ts-reduxtoolkit/static/js/main.cec18c19.js.map"
   },
   "entrypoints": [
     "static/css/main.4325cce1.css",
-    "static/js/main.50eb126d.js"
+    "static/js/main.cec18c19.js"
   ]
 }
