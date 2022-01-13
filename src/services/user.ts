@@ -39,6 +39,7 @@ export const userApi = createApi({
             return headers;
         },
     }),
+    tagTypes: ['User'],
     endpoints: (builder) => ({
         createNewUser: builder.mutation<CreateUserResponse, CreateUserBody>({
             query: ({ firstName, lastName, email, phone, password }) => ({
@@ -52,6 +53,7 @@ export const userApi = createApi({
                     password: password,
                 },
             }),
+            invalidatesTags: ['User']
         }),
         loginUser: builder.mutation<LoginUserSuccessResponse, LoginUserBody>({
             query: ({ email, password }) => ({
@@ -65,6 +67,7 @@ export const userApi = createApi({
                     password: password,
                 },
             }),
+            invalidatesTags: ['User']
         }),
         forgotPassword: builder.mutation<ForgotPasswordResponse, string>({
             query: (email) => ({
@@ -80,6 +83,7 @@ export const userApi = createApi({
                 url: `api/v4/profile/show`,
                 method: 'GET',
             }),
+            providesTags: ['User']
         }),
         updateUserProfile: builder.mutation<
             UserProfileResponse,
@@ -93,6 +97,7 @@ export const userApi = createApi({
                     'last-name': lastName,
                 }),
             }),
+            invalidatesTags: ['User']
         }),
         changePassword: builder.mutation<
             ChangePasswordResponse,

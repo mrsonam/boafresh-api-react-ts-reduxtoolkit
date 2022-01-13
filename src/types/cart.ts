@@ -64,12 +64,54 @@ export interface GetCartData {
     total: number;
     pickupTotal: number;
     cartProducts: CartProductData[] | [];
-};
+}
 
 interface GetCartSuccessResponse {
     meta: MetaShort;
     data: GetCartData;
     code: number;
+}
+
+interface GetAddressData {
+    id: number;
+    title: string;
+    latitude: number;
+    longitude: number;
+    customer: string;
+    contactNo: string;
+    address: string;
+    detail: {
+        country: string;
+        provience: string;
+        district: string;
+        local_government: string;
+        ward: string;
+        street_address: string;
+        formatted_address: string;
+        intersection: string;
+    };
+    isDefault: boolean;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface GetAddressResponse {
+    meta: MetaShort;
+    data: GetAddressData[];
+    code: number;
+}
+
+export interface AddAddressResponse {
+    meta: MetaShort;
+    data: GetAddressData;
+    code: number;
+}
+
+export interface AddAddressBody {
+    title: string;
+    latitude: string;
+    longitude: string;
+    isDefault: boolean;
 }
 
 export type AddToCartResponse = AddToCartSuccessResponse | ErrorResponse;

@@ -62,9 +62,6 @@ const Profile: React.FC = (): JSX.Element => {
     const handleUpdateProfile = () => {
         updateUserProfile({ firstName, lastName });
         setOpen(true);
-        setTimeout(() => {
-            window.location.reload();
-        }, 2000);
     };
     return error ? (
         <>Something is Wrong!</>

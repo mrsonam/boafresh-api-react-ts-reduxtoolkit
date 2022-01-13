@@ -27,7 +27,7 @@ import {
     useUpdateCartMutation,
 } from '../../services/cart';
 import { NavLink } from 'react-router-dom';
-import { CartProductData, GetCartData } from '../../types/cart';
+import { CartProductData } from '../../types/cart';
 import { DeleteOutlined } from '@mui/icons-material';
 
 const useStyle = makeStyles({
@@ -377,7 +377,7 @@ const Cart: React.FC = (): JSX.Element => {
                                     </Stack>
 
                                     <NavLink to="/boafresh-api-react-ts-reduxtoolkit/checkout">
-                                        <Button variant="contained">
+                                        <Button variant="contained" fullWidth>
                                             Proceed To Checkout
                                         </Button>
                                     </NavLink>
