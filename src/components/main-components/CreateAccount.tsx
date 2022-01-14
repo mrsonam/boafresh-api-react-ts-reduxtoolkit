@@ -11,6 +11,7 @@ import {
     Snackbar,
     Alert,
     Divider,
+    FormControl,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import {
@@ -48,6 +49,10 @@ const useStyle = makeStyles({
 });
 
 const CreateAccount: React.FC = (): JSX.Element => {
+    if(localStorage.getItem('token') !== null){
+        window.location.href = '/boafresh-api-react-ts-reduxtoolkit/profile'
+    }
+    
     const classes = useStyle();
 
     const defaultInput = {firstName: '',

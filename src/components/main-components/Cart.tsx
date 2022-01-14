@@ -59,6 +59,10 @@ const useStyle = makeStyles({
 });
 
 const Cart: React.FC = (): JSX.Element => {
+    if(localStorage.getItem('token') === null){
+        window.location.href = '/boafresh-api-react-ts-reduxtoolkit/login'
+    }
+    
     const array = [1, 2, 3, 4, 5];
     const classes = useStyle();
 
@@ -66,28 +70,6 @@ const Cart: React.FC = (): JSX.Element => {
 
     const { data, isError, isLoading, isSuccess } = useGetCartQuery();
 
-    // const defaultCart = {
-    //     id: 0,
-    //     cartNumber: '',
-    //     categoryId: null,
-    //     warehouseId: 0,
-    //     orderAmount: 0,
-    //     discount: 0,
-    //     scheme: 0,
-    //     subTotal: 0,
-    //     deliveryCharge: 0,
-    //     extra: [],
-    //     message: '',
-    //     campaign_message: '',
-    //     total: 0,
-    //     pickupTotal: 0,
-    //     cartProducts: [],
-    // };
-
-    // const [cart, setCart] = useState<GetCartData>(defaultCart);
-    // useEffect(() => {
-    //     setCart(data?.data || defaultCart);
-    // }, []);
     const [updateCart, updateResponse] = useUpdateCartMutation();
     const [deleteCart, deleteResponse] = useDeleteCartMutation();
 

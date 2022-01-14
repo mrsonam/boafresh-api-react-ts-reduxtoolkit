@@ -1,32 +1,42 @@
 import React, { useState } from 'react';
-import { useGetSingleProductQuery } from '../../services/products';
 import {
     Box,
     Card,
-    CardMedia,
     Typography,
     CardContent,
     Button,
     Stack,
     Skeleton,
-    ButtonGroup,
-    Snackbar,
-    Alert,
     Divider,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { useParams } from 'react-router-dom';
-import { useAddToCartMutation, useGetCartQuery } from '../../services/cart';
+import { useDeleteCartMutation, useGetCartQuery } from '../../services/cart';
 import { CartProductData } from '../../types/cart';
+import {
+    useGetAddressQuery,
+    useGetPaymentMethodQuery,
+} from '../../services/delivery';
+import AddressDialog from '../sub-components/Checkout/AddressDialog';
+import { useForm } from 'react-hook-form';
 
 const useStyle = makeStyles({
     heading: {
         marginBottom: '30px',
     },
     cartCard: {
-        alignItems: 'end',
         margin: '20px 0',
-        width: '400px',
+        width: '600px',
+        borderRadius: '20px',
+    },
+    deliveryCard: {
+        margin: '20px 0',
+        width: '600px',
+        height: '430px',
         borderRadius: '20px',
     },
     main: {
@@ -34,7 +44,7 @@ const useStyle = makeStyles({
         marginTop: '15px',
         marginLeft: 240,
     },
-    products: {
+    inner: {
         margin: '0 50px',
     },
     cardImg: {
@@ -45,19 +55,55 @@ const useStyle = makeStyles({
 });
 
 const Checkout: React.FC = (): JSX.Element => {
+    if(localStorage.getItem('token') === null){
+        window.location.href = '/boafresh-api-react-ts-reduxtoolkit/login'
+    }
+    
     const classes = useStyle();
 
-    const [count, setCount] = useState(1);
+    const [openAddressDialog, setOpenAddressDialog] = useState(false);
 
-    const [open, setOpen] = useState(true);
+    const [address, setAddress] = useState('');
+    const [paymentMethod, setPaymentMethod] = useState('');
 
-    const { data, error, isLoading } = useGetCartQuery();
+    const getCart = useGetCartQuery();
 
-    return error ? (
+    const getAddress = useGetAddressQuery();
+
+    const getPaymentMethod = useGetPaymentMethodQuery();
+
+    const [checkout, checkoutRponse] = useDeleteCartMutation();
+
+    if(checkoutRponse.isSuccess){
+        window.location.href = "/boafresh-api-react-ts-reduxtoolkit"
+    }
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
+
+    const openDialog = () => {
+        setOpenAddressDialog(true);
+    };
+
+    const closeDialog = () => {
+        setOpenAddressDialog(false);
+    };
+
+    const handleAddressChange = (event: SelectChangeEvent) => {
+        setAddress(event.target.value as string);
+    };
+
+    const handlePaymentChange = (event: SelectChangeEvent) => {
+        setPaymentMethod(event.target.value as string);
+    };
+    return getCart.error ? (
         <>Something is Wrong</>
-    ) : isLoading ? (
+    ) : getCart.isLoading ? (
         <Box component="main" className={classes.main}>
-            <Box className={classes.products}>
+            <Box className={classes.inner}>
                 <Skeleton
                     className={classes.heading}
                     animation="wave"
@@ -108,39 +154,152 @@ const Checkout: React.FC = (): JSX.Element => {
                 </Stack>
             </Box>
         </Box>
-    ) : data ? (
+    ) : getCart.data ? (
         <Box component="main" className={classes.main}>
-            <Box className={classes.products}>
+            <Box className={classes.inner}>
                 <Box className={classes.heading}>
                     <Typography variant="h4" component="div">
                         Checkout
                     </Typography>
                 </Box>
-                <Stack
-                    spacing={5}
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="top"
+                <form
+                    onSubmit={handleSubmit(() => {
+                        checkout();
+                    })}
                 >
-                    <Card className={classes.cartCard}>
-                        <CardContent>
-                            <Typography noWrap variant="h5" component="div">
-                                Delivery Address
-                            </Typography>
-                            <Divider />
-                        </CardContent>
-                    </Card>
+                    <Stack
+                        spacing={5}
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="top"
+                    >
+                        <Card className={classes.deliveryCard}>
+                            <CardContent>
+                                <Stack spacing={3}>
+                                    <Typography
+                                        noWrap
+                                        variant="h5"
+                                        component="div"
+                                    >
+                                        Delivery Details
+                                    </Typography>
+                                    <Divider />
+                                    <FormControl fullWidth>
+                                        <InputLabel id="demo-simple-select-label">
+                                            Delivery Address
+                                        </InputLabel>
+                                        <Select
+                                            {...register('deliveryAddress', {
+                                                required:
+                                                    'Delivery Address cannot be empty',
+                                            })}
+                                            value={address}
+                                            label="Delivery Address"
+                                            onChange={handleAddressChange}
+                                        >
+                                            {getAddress.data?.data.map(
+                                                (address) => (
+                                                    <MenuItem
+                                                        key={address.id}
+                                                        value={10}
+                                                    >
+                                                        {address.title}
+                                                    </MenuItem>
+                                                ),
+                                            )}
+                                        </Select>
+                                    </FormControl>
+                                    <Typography
+                                        color={'error'}
+                                        variant="subtitle2"
+                                    >
+                                        {errors.deliveryAddress?.message}
+                                    </Typography>
+                                    <Button
+                                        variant="contained"
+                                        fullWidth
+                                        onClick={openDialog}
+                                    >
+                                        Add New Address
+                                    </Button>
+                                    <Divider />
+                                    <FormControl fullWidth>
+                                        <InputLabel id="demo-simple-select-label">
+                                            Payment Method
+                                        </InputLabel>
+                                        <Select
+                                            {...register('paymentMethod', {
+                                                required:
+                                                    'Payment Method cannot be empty',
+                                            })}
+                                            value={paymentMethod}
+                                            label="Payment Method"
+                                            onChange={handlePaymentChange}
+                                        >
+                                            {getPaymentMethod.data?.data.map(
+                                                (method) => (
+                                                    <MenuItem
+                                                        key={method.id}
+                                                        value={10}
+                                                    >
+                                                        {method.title}
+                                                    </MenuItem>
+                                                ),
+                                            )}
+                                        </Select>
+                                    </FormControl>
+                                    <Typography
+                                        color={'error'}
+                                        variant="subtitle2"
+                                    >
+                                        {errors.paymentMethod?.message}
+                                    </Typography>
+                                </Stack>
+                            </CardContent>
+                        </Card>
+                        <AddressDialog
+                            open={openAddressDialog}
+                            closeDialog={closeDialog}
+                        />
 
-                    <Card className={classes.cartCard}>
-                        <CardContent>
-                            <Stack spacing={3}>
-                                <Typography noWrap variant="h5" component="div">
-                                    Your Order
-                                </Typography>
-                                <Divider />
-                                {(
-                                    data.data.cartProducts as CartProductData[]
-                                ).map((product) => (
+                        <Card className={classes.cartCard}>
+                            <CardContent>
+                                <Stack spacing={3}>
+                                    <Typography
+                                        noWrap
+                                        variant="h5"
+                                        component="div"
+                                    >
+                                        Your Order
+                                    </Typography>
+                                    <Divider />
+                                    {(
+                                        getCart.data.data
+                                            .cartProducts as CartProductData[]
+                                    ).map((product) => (
+                                        <Stack
+                                            spacing={5}
+                                            direction="row"
+                                            justifyContent="space-between"
+                                            alignItems="center"
+                                            key={product.product.id}
+                                        >
+                                            <Typography
+                                                variant="subtitle1"
+                                                component="div"
+                                            >
+                                                {product.product.title} X{' '}
+                                                {product.quantity}
+                                            </Typography>
+                                            <Typography
+                                                variant="subtitle1"
+                                                component="div"
+                                            >
+                                                Nrs {product.price}
+                                            </Typography>
+                                        </Stack>
+                                    ))}
+                                    <Divider />
                                     <Stack
                                         spacing={5}
                                         direction="row"
@@ -151,108 +310,90 @@ const Checkout: React.FC = (): JSX.Element => {
                                             variant="subtitle1"
                                             component="div"
                                         >
-                                            {product.product.title} X{' '}
-                                            {product.quantity}
+                                            Sub-Total
                                         </Typography>
                                         <Typography
                                             variant="subtitle1"
                                             component="div"
                                         >
-                                            Nrs {product.price}
+                                            Nrs {getCart.data?.data.subTotal}
                                         </Typography>
                                     </Stack>
-                                ))}
-                                <Divider />
-                                <Stack
-                                    spacing={5}
-                                    direction="row"
-                                    justifyContent="space-between"
-                                    alignItems="center"
-                                >
-                                    <Typography
-                                        variant="subtitle1"
-                                        component="div"
+                                    <Stack
+                                        spacing={5}
+                                        direction="row"
+                                        justifyContent="space-between"
+                                        alignItems="center"
                                     >
-                                        Sub-Total
-                                    </Typography>
-                                    <Typography
-                                        variant="subtitle1"
-                                        component="div"
+                                        <Typography
+                                            variant="subtitle1"
+                                            component="div"
+                                        >
+                                            Discount
+                                        </Typography>
+                                        <Typography
+                                            variant="subtitle1"
+                                            component="div"
+                                        >
+                                            Nrs {getCart.data?.data.discount}
+                                        </Typography>
+                                    </Stack>
+                                    <Stack
+                                        spacing={5}
+                                        direction="row"
+                                        justifyContent="space-between"
+                                        alignItems="center"
                                     >
-                                        Nrs {data?.data.subTotal}
-                                    </Typography>
-                                </Stack>
-                                <Stack
-                                    spacing={5}
-                                    direction="row"
-                                    justifyContent="space-between"
-                                    alignItems="center"
-                                >
-                                    <Typography
-                                        variant="subtitle1"
-                                        component="div"
+                                        <Typography
+                                            variant="subtitle1"
+                                            component="div"
+                                        >
+                                            Delivery Charge
+                                        </Typography>
+                                        <Typography
+                                            variant="subtitle1"
+                                            component="div"
+                                        >
+                                            Nrs{' '}
+                                            {getCart.data?.data.deliveryCharge}
+                                        </Typography>
+                                    </Stack>
+                                    <Divider />
+                                    <Stack
+                                        spacing={5}
+                                        direction="row"
+                                        justifyContent="space-between"
+                                        alignItems="center"
                                     >
-                                        Discount
-                                    </Typography>
-                                    <Typography
-                                        variant="subtitle1"
-                                        component="div"
-                                    >
-                                        Nrs {data?.data.discount}
-                                    </Typography>
-                                </Stack>
-                                <Stack
-                                    spacing={5}
-                                    direction="row"
-                                    justifyContent="space-between"
-                                    alignItems="center"
-                                >
-                                    <Typography
-                                        variant="subtitle1"
-                                        component="div"
-                                    >
-                                        Delivery Charge
-                                    </Typography>
-                                    <Typography
-                                        variant="subtitle1"
-                                        component="div"
-                                    >
-                                        Nrs {data?.data.deliveryCharge}
-                                    </Typography>
-                                </Stack>
-                                <Divider />
-                                <Stack
-                                    spacing={5}
-                                    direction="row"
-                                    justifyContent="space-between"
-                                    alignItems="center"
-                                >
-                                    <Typography
-                                        fontWeight="bold"
-                                        variant="h6"
-                                        component="div"
-                                        color="primary"
-                                    >
-                                        Grand-Total
-                                    </Typography>
-                                    <Typography
-                                        fontWeight="bold"
-                                        variant="h6"
-                                        component="div"
-                                    >
-                                        Nrs {data?.data.total}
-                                    </Typography>
-                                </Stack>
+                                        <Typography
+                                            fontWeight="bold"
+                                            variant="h6"
+                                            component="div"
+                                            color="primary"
+                                        >
+                                            Grand-Total
+                                        </Typography>
+                                        <Typography
+                                            fontWeight="bold"
+                                            variant="h6"
+                                            component="div"
+                                        >
+                                            Nrs {getCart.data?.data.total}
+                                        </Typography>
+                                    </Stack>
 
-                                {/* <NavLink to="/boafresh-api-react-ts-reduxtoolkit/checkout">
-                                        <Button variant="contained">
-                                            Proceed To Checkout
-                                        </Button>
-                                    </NavLink> */}
-                            </Stack>
-                        </CardContent>
-                    </Card>
-                </Stack>
+                                    <Button
+                                        type="submit"
+                                        variant="contained"
+                                        fullWidth
+                                    >
+                                        Checkout
+                                    </Button>
+                                </Stack>
+                            </CardContent>
+                        </Card>
+                    </Stack>
+                </form>
             </Box>
         </Box>
     ) : (

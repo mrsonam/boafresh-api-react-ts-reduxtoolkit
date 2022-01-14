@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useGetSingleProductQuery } from '../../../services/products';
 import {
     Box,
@@ -69,13 +69,16 @@ const CartDialog = ({ open, productId, closeDialog }: CartDialogProps) => {
 
     const [addToCart, responseInfo] = useAddToCartMutation();
 
-    const addItemToCart = () => {
+    useEffect(() => {
         setItem({
             ...item,
             productId: data?.data.id || 0,
             priceId: data?.data.unitPrice[0].id || 0,
             quantity: count,
         });
+    }, [count, data]);
+
+    const addItemToCart = () => {
         addToCart(item);
         setOpenAlert(true);
         setCount(1);

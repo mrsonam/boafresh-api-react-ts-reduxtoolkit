@@ -29,6 +29,10 @@ const useStyle = makeStyles({
 });
 
 const ChangePassword: React.FC = (): JSX.Element => {
+    if(localStorage.getItem('token') === null){
+        window.location.href = '/boafresh-api-react-ts-reduxtoolkit/login'
+    }
+
     const classes = useStyle();
 
     const [changePassword, responseInfo] = useChangePasswordMutation();

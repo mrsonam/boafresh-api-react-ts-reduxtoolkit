@@ -192,12 +192,16 @@ const SideBar: React.FC = (): JSX.Element => {
                     <>
                         <NavLink to="/boafresh-api-react-ts-reduxtoolkit/profile">
                             <ListItem
-                                selected={location.pathname === '/boafresh-api-react-ts-reduxtoolkit/profile'}
+                                selected={
+                                    location.pathname ===
+                                    '/boafresh-api-react-ts-reduxtoolkit/profile'
+                                }
                                 button
                                 classes={{ selected: classes.link }}
                             >
                                 <ListItemText primary="Profile" />
-                                {location.pathname === '/boafresh-api-react-ts-reduxtoolkit/profile' ? (
+                                {location.pathname ===
+                                '/boafresh-api-react-ts-reduxtoolkit/profile' ? (
                                     <ChevronRightOutlinedIcon />
                                 ) : (
                                     <></>
@@ -206,12 +210,16 @@ const SideBar: React.FC = (): JSX.Element => {
                         </NavLink>
                         <NavLink to="/boafresh-api-react-ts-reduxtoolkit/changePassword">
                             <ListItem
-                                selected={location.pathname === '/boafresh-api-react-ts-reduxtoolkit/changePassword'}
+                                selected={
+                                    location.pathname ===
+                                    '/boafresh-api-react-ts-reduxtoolkit/changePassword'
+                                }
                                 button
                                 classes={{ selected: classes.link }}
                             >
                                 <ListItemText primary="Change Password" />
-                                {location.pathname === '/boafresh-api-react-ts-reduxtoolkit/changePassword' ? (
+                                {location.pathname ===
+                                '/boafresh-api-react-ts-reduxtoolkit/changePassword' ? (
                                     <ChevronRightOutlinedIcon />
                                 ) : (
                                     <></>
@@ -233,13 +241,17 @@ const SideBar: React.FC = (): JSX.Element => {
                     <>
                         <NavLink to="/boafresh-api-react-ts-reduxtoolkit/signup">
                             <ListItem
-                                selected={location.pathname === '/boafresh-api-react-ts-reduxtoolkit/signup'}
+                                selected={
+                                    location.pathname ===
+                                    '/boafresh-api-react-ts-reduxtoolkit/signup'
+                                }
                                 button
                                 key="signup"
                                 classes={{ selected: classes.link }}
                             >
                                 <ListItemText primary="Create Account" />
-                                {location.pathname === '/boafresh-api-react-ts-reduxtoolkit/signup' ? (
+                                {location.pathname ===
+                                '/boafresh-api-react-ts-reduxtoolkit/signup' ? (
                                     <ChevronRightOutlinedIcon />
                                 ) : (
                                     <></>
@@ -248,13 +260,17 @@ const SideBar: React.FC = (): JSX.Element => {
                         </NavLink>
                         <NavLink to="/boafresh-api-react-ts-reduxtoolkit/login">
                             <ListItem
-                                selected={location.pathname === '/boafresh-api-react-ts-reduxtoolkit/login'}
+                                selected={
+                                    location.pathname ===
+                                    '/boafresh-api-react-ts-reduxtoolkit/login'
+                                }
                                 button
                                 key="login"
                                 classes={{ selected: classes.link }}
                             >
                                 <ListItemText primary="Login" />
-                                {location.pathname === '/boafresh-api-react-ts-reduxtoolkit/login' ? (
+                                {location.pathname ===
+                                '/boafresh-api-react-ts-reduxtoolkit/login' ? (
                                     <ChevronRightOutlinedIcon />
                                 ) : (
                                     <></>

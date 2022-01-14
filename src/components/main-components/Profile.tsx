@@ -37,6 +37,10 @@ const useStyle = makeStyles({
 });
 
 const Profile: React.FC = (): JSX.Element => {
+    if (localStorage.getItem('token') === null) {
+        window.location.href = '/boafresh-api-react-ts-reduxtoolkit/login';
+    }
+
     const classes = useStyle();
 
     const { data, isLoading, error } = useGetUserProfileQuery();
@@ -68,127 +72,118 @@ const Profile: React.FC = (): JSX.Element => {
     ) : (
         <Box className={classes.main} component="main">
             <Box className={classes.home}>
-                {isLoading ? (
-                    <>Loading...</>
-                ) : (
-                    <Box>
-                        <Typography
-                            variant="h4"
-                            component="div"
-                            className={classes.heading}
-                        >
-                            My Account
-                        </Typography>
-                        <Stack spacing={3}>
-                            <Avatar
-                                alt="Profile Pic"
-                                src={image}
-                                sx={{ width: 300, height: 300, mx: 'auto' }}
-                            />
-                            <Stack direction="row" spacing={3}>
-                                <TextField
-                                    label="First Name"
-                                    variant="outlined"
-                                    fullWidth
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <AccountBoxOutlined />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                    value={firstName}
-                                    onChange={(e) =>
-                                        setFirstName(e.target.value)
-                                    }
-                                />
-                                <TextField
-                                    label="Last Name"
-                                    variant="outlined"
-                                    fullWidth
-                                    InputProps={{
-                                        startAdornment: (
-                                            <InputAdornment position="start">
-                                                <AccountBoxOutlined />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                    value={lastName}
-                                    onChange={(e) =>
-                                        setLastName(e.target.value)
-                                    }
-                                />{' '}
-                            </Stack>
-
+                <Box>
+                    <Typography
+                        variant="h4"
+                        component="div"
+                        className={classes.heading}
+                    >
+                        My Account
+                    </Typography>
+                    <Stack spacing={3}>
+                        <Avatar
+                            alt="Profile Pic"
+                            src={image}
+                            sx={{ width: 300, height: 300, mx: 'auto' }}
+                        />
+                        <Stack direction="row" spacing={3}>
                             <TextField
-                                type={'number'}
-                                label="Phone Number"
+                                label="First Name"
                                 variant="outlined"
+                                fullWidth
                                 InputProps={{
-                                    readOnly: true,
                                     startAdornment: (
                                         <InputAdornment position="start">
-                                            <PhoneAndroidOutlined />
+                                            <AccountBoxOutlined />
                                         </InputAdornment>
                                     ),
                                 }}
-                                value={phone}
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
                             />
                             <TextField
-                                type={'email'}
-                                label="Email Address"
+                                label="Last Name"
                                 variant="outlined"
+                                fullWidth
                                 InputProps={{
-                                    readOnly: true,
                                     startAdornment: (
                                         <InputAdornment position="start">
-                                            <EmailOutlined />
+                                            <AccountBoxOutlined />
                                         </InputAdornment>
                                     ),
                                 }}
-                                value={email}
-                            />
-                            <Button
-                                variant="contained"
-                                onClick={handleUpdateProfile}
-                            >
-                                Update
-                            </Button>
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
+                            />{' '}
                         </Stack>
-                        {responseInfo.isSuccess ? (
-                            <Snackbar
-                                open={open}
-                                autoHideDuration={5000}
+
+                        <TextField
+                            type={'number'}
+                            label="Phone Number"
+                            variant="outlined"
+                            InputProps={{
+                                readOnly: true,
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <PhoneAndroidOutlined />
+                                    </InputAdornment>
+                                ),
+                            }}
+                            value={phone}
+                        />
+                        <TextField
+                            type={'email'}
+                            label="Email Address"
+                            variant="outlined"
+                            InputProps={{
+                                readOnly: true,
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <EmailOutlined />
+                                    </InputAdornment>
+                                ),
+                            }}
+                            value={email}
+                        />
+                        <Button
+                            variant="contained"
+                            onClick={handleUpdateProfile}
+                        >
+                            Update
+                        </Button>
+                    </Stack>
+                    {responseInfo.isSuccess ? (
+                        <Snackbar
+                            open={open}
+                            autoHideDuration={5000}
+                            onClose={() => setOpen(false)}
+                        >
+                            <Alert
+                                severity="success"
+                                sx={{ width: '100%' }}
                                 onClose={() => setOpen(false)}
                             >
-                                <Alert
-                                    severity="success"
-                                    sx={{ width: '100%' }}
-                                    onClose={() => setOpen(false)}
-                                >
-                                    Profile Updated Successfuly
-                                </Alert>
-                            </Snackbar>
-                        ) : responseInfo.isError ? (
-                            <Snackbar
-                                open={open}
-                                autoHideDuration={5000}
+                                Profile Updated Successfuly
+                            </Alert>
+                        </Snackbar>
+                    ) : responseInfo.isError ? (
+                        <Snackbar
+                            open={open}
+                            autoHideDuration={5000}
+                            onClose={() => setOpen(false)}
+                        >
+                            <Alert
+                                severity="error"
+                                sx={{ width: '100%' }}
                                 onClose={() => setOpen(false)}
                             >
-                                <Alert
-                                    severity="error"
-                                    sx={{ width: '100%' }}
-                                    onClose={() => setOpen(false)}
-                                >
-                                    Something went wrong while updating your
-                                    Profile
-                                </Alert>
-                            </Snackbar>
-                        ) : (
-                            <></>
-                        )}
-                    </Box>
-                )}
+                                Something went wrong while updating your Profile
+                            </Alert>
+                        </Snackbar>
+                    ) : (
+                        <></>
+                    )}
+                </Box>
             </Box>
         </Box>
     );

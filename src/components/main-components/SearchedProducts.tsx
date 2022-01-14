@@ -86,47 +86,52 @@ const SearchedProducts: React.FC = (): JSX.Element => {
 
     const [sort, setSort] = useState('');
 
+    const [productsToSort, setProductsToSort] = useState<Product[]>([]);
+
     const handleSortChange = (event: SelectChangeEvent) => {
         setSort(event.target.value as string);
+        setProductsToSort([...products]);
     };
 
-    if (sort === 'nameAsc') {
-        const productsToSort = [...products];
-        const sortedProducts = productsToSort.sort((a, b) => {
-            if (a.title > b.title) return 1;
-            else if (b.title > a.title) return -1;
-            else return 0;
-        });
+    const sortProducts = () => {
+        let sortedProducts: Product[] = [];
+        if (sort === 'nameAsc') {
+            sortedProducts = productsToSort.sort((a, b) => {
+                if (a.title > b.title) return 1;
+                else if (b.title > a.title) return -1;
+                else return 0;
+            });
+        } else if (sort === 'nameDesc') {
+            sortedProducts = productsToSort.sort((a, b) => {
+                if (a.title > b.title) return -1;
+                else if (b.title > a.title) return 1;
+                else return 0;
+            });
+        } else if (sort === 'priceAsc') {
+            sortedProducts = productsToSort.sort((a, b) => {
+                if (a.unitPrice[0].sellingPrice < b.unitPrice[0].sellingPrice)
+                    return -1;
+                else if (
+                    b.unitPrice[0].sellingPrice < a.unitPrice[0].sellingPrice
+                )
+                    return 1;
+                else return 0;
+            });
+        } else if (sort === 'priceDesc') {
+            sortedProducts = productsToSort.sort((a, b) => {
+                if (a.unitPrice[0].sellingPrice > b.unitPrice[0].sellingPrice)
+                    return -1;
+                else if (
+                    b.unitPrice[0].sellingPrice > a.unitPrice[0].sellingPrice
+                )
+                    return 1;
+                else return 0;
+            });
+        }
         setProducts([...sortedProducts]);
-    } else if (sort === 'nameDesc') {
-        const productsToSort = [...products];
-        const sortedProducts = productsToSort.sort((a, b) => {
-            if (a.title > b.title) return -1;
-            else if (b.title > a.title) return 1;
-            else return 0;
-        });
-        setProducts([...sortedProducts]);
-    } else if (sort === 'priceAsc') {
-        const productsToSort = [...products];
-        const sortedProducts = productsToSort.sort((a, b) => {
-            if (a.unitPrice[0].sellingPrice < b.unitPrice[0].sellingPrice)
-                return -1;
-            else if (b.unitPrice[0].sellingPrice < a.unitPrice[0].sellingPrice)
-                return 1;
-            else return 0;
-        });
-        setProducts([...sortedProducts]);
-    } else if (sort === 'priceDesc') {
-        const productsToSort = [...products];
-        const sortedProducts = productsToSort.sort((a, b) => {
-            if (a.unitPrice[0].sellingPrice > b.unitPrice[0].sellingPrice)
-                return -1;
-            else if (b.unitPrice[0].sellingPrice > a.unitPrice[0].sellingPrice)
-                return 1;
-            else return 0;
-        });
-        setProducts([...sortedProducts]);
-    }
+    };
+
+    useEffect(sortProducts, [sort]);
 
     const [page, setPage] = useState(1);
     const [productsPerPage, setProductsPerPage] = useState('10');
@@ -325,7 +330,6 @@ const SearchedProducts: React.FC = (): JSX.Element => {
                                         item
                                         xs={12}
                                         key={product.id}
-                                        spacing={5}
                                     >
                                         <Card
                                             sx={{ borderRadius: '20px' }}

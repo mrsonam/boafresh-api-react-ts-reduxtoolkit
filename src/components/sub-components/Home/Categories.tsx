@@ -9,6 +9,7 @@ import {
     CardActionArea,
     Grid,
     Skeleton,
+    Stack,
 } from '@mui/material';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import { useGetHomeQuery } from '../../../services/home';
@@ -109,23 +110,19 @@ const Categories = () => {
                                                     color="text.disabled"
                                                     component="div"
                                                 >
-                                                    {category.productCount !==
-                                                    1 ? (
-                                                        `${category.productCount} Products`
-                                                    ) : (
-                                                        `${category.productCount} Product`
-                                                    )}
+                                                    {category.productCount !== 1
+                                                        ? `${category.productCount} Products`
+                                                        : `${category.productCount} Product`}
                                                 </Typography>
-                                                <Button
-                                                    size="small"
-                                                    variant="text"
-                                                    color="primary"
-                                                    endIcon={
-                                                        <ShoppingBagIcon />
-                                                    }
+                                                <Stack
+                                                    direction="row"
+                                                    spacing={1}
                                                 >
-                                                    Shop Now
-                                                </Button>
+                                                    <Typography color="primary">
+                                                        Shop Now
+                                                    </Typography>
+                                                    <ShoppingBagIcon color="primary" />
+                                                </Stack>
                                             </CardContent>
                                         </CardActionArea>
                                     </Card>

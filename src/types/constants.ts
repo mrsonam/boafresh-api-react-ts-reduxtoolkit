@@ -30,9 +30,12 @@ interface Error {
 }
 
 export interface ErrorResponse {
-    meta: {
-        version: string;
-        error_type: string;
+    data: {
+        meta: {
+            version: string;
+            error_type: string;
+        };
+        errors: Error[];
+        code: number;
     };
-    errors: Error[];
 }

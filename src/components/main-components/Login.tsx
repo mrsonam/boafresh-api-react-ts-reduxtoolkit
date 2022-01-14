@@ -43,6 +43,9 @@ const useStyle = makeStyles({
 });
 
 const Login: React.FC = (): JSX.Element => {
+    if(localStorage.getItem('token') !== null){
+        window.location.href = '/boafresh-api-react-ts-reduxtoolkit/profile'
+    }
     const classes = useStyle();
 
     const {
@@ -56,6 +59,8 @@ const Login: React.FC = (): JSX.Element => {
         password: '',
     });
 
+    const [errorMessage, setErrorMessage] = useState('Cannot Login')
+
     const [loginUser, responseInfo] = useLoginUserMutation();
     if (responseInfo.isSuccess) {
         window.localStorage.setItem(
@@ -63,6 +68,10 @@ const Login: React.FC = (): JSX.Element => {
             `"Bearer ${responseInfo.data.access_token}"`,
         );
         window.location.href = '/boafresh-api-react-ts-reduxtoolkit';
+    }
+
+    if (responseInfo.isError){
+        console.log(responseInfo.error)
     }
 
     return (

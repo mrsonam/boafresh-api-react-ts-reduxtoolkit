@@ -2,11 +2,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { baseURL, warehouseId, apiKey } from '../apiConstants';
 import {
-    AddAddressBody,
-    AddAddressResponse,
     AddToCartResponse,
     CartBody,
-    GetAddressResponse,
     GetCartResponse,
     UpdateCartBody,
 } from '../types/cart';
@@ -73,24 +70,6 @@ export const cartApi = createApi({
             }),
             providesTags: ['Cart'],
         }),
-        getAddress: builder.query<GetAddressResponse, void>({
-            query: () => ({
-                url: 'api/v4/delivery-address',
-                method: 'GET',
-            }),
-        }),
-        addAddress: builder.mutation<AddAddressResponse, AddAddressBody>({
-            query: ({title, latitude, longitude, isDefault}) => ({
-                url: 'api/v4/delivery-address',
-                method: 'POST',
-                body: JSON.stringify({
-                    title: title,
-                    latitude: latitude,
-                    longitude: longitude,
-                    isDefault: isDefault,
-                }),
-            }),
-        }),
     }),
 });
 
@@ -102,6 +81,4 @@ export const {
     useUpdateCartMutation,
     useDeleteCartItemMutation,
     useDeleteCartMutation,
-    useGetAddressQuery,
-    useAddAddressMutation,
 } = cartApi;
