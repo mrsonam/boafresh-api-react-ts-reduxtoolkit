@@ -9,7 +9,6 @@ import {
     CardActionArea,
     Grid,
     Stack,
-    Skeleton,
     SelectChangeEvent,
     Tabs,
     Tab,
@@ -22,35 +21,14 @@ import {
 import { GridViewOutlined, ViewListOutlined } from '@mui/icons-material';
 import { NavLink, useParams } from 'react-router-dom';
 import { useGetProductsByCategoryQuery } from '../../services/products';
-import { makeStyles } from '@mui/styles';
 import CartDialog from '../sub-components/Cart/CartDialog';
 import { Product } from '../../types/products';
-
-const useStyle = makeStyles({
-    heading: {
-        marginBottom: '30px',
-    },
-    productCard: {
-        borderRadius: '20px',
-    },
-    main: {
-        maxWidth: '100vw',
-        marginTop: '15px',
-        marginLeft: 240,
-    },
-    products: {
-        margin: '0 50px',
-    },
-    tabs: {
-        margin: '20px 0',
-    },
-});
+import { useStyle } from '../styles/products';
+import ProductsSkeleton from '../sub-components/Products/ProductsSkeleton';
 
 const ProductsByCategory: React.FC = (): JSX.Element => {
     const [open, setOpen] = useState(false);
     const [productId, setProductId] = useState(0);
-
-    const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
     const classes = useStyle();
 
@@ -163,60 +141,10 @@ const ProductsByCategory: React.FC = (): JSX.Element => {
     return error ? (
         <>Something is Wrong</>
     ) : isLoading ? (
-        <Box component="main" className={classes.main}>
-            <Box className={classes.products}>
-                <Box className={classes.heading}>
-                    <Skeleton
-                        animation="wave"
-                        variant="text"
-                        width={300}
-                        height={50}
-                    />
-                    <Skeleton
-                        animation="wave"
-                        variant="text"
-                        width={150}
-                        height={30}
-                    />
-                </Box>
-                <Grid container spacing={5}>
-                    {array.map((elem) => {
-                        return (
-                            <Grid item xs={2.4} key={elem}>
-                                <Skeleton
-                                    animation="wave"
-                                    variant="rectangular"
-                                    width={'100%'}
-                                    height={250}
-                                    className={classes.productCard}
-                                />
-                                <Skeleton
-                                    animation="wave"
-                                    variant="text"
-                                    width={100}
-                                    height={40}
-                                />
-                                <Skeleton
-                                    animation="wave"
-                                    variant="text"
-                                    width={50}
-                                    height={30}
-                                />
-                                <Skeleton
-                                    animation="wave"
-                                    variant="rectangular"
-                                    width={'100%'}
-                                    height={30}
-                                />
-                            </Grid>
-                        );
-                    })}
-                </Grid>
-            </Box>
-        </Box>
+        <ProductsSkeleton/>
     ) : data ? (
         <Box component="main" className={classes.main}>
-            <Box className={classes.products}>
+            <Box className={classes.inner}>
                 <Box className={classes.heading}>
                     <Typography variant="h4" component="div">
                         {data.data[0].categoryTitle

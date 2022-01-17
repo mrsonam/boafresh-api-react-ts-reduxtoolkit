@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
     Box,
     Typography,
     Stack,
-    Skeleton,
     ButtonGroup,
     Table,
     TableBody,
@@ -19,7 +18,6 @@ import {
     Alert,
     IconButton,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import {
     useDeleteCartItemMutation,
     useDeleteCartMutation,
@@ -29,46 +27,19 @@ import {
 import { NavLink } from 'react-router-dom';
 import { CartProductData } from '../../types/cart';
 import { DeleteOutlined } from '@mui/icons-material';
-
-const useStyle = makeStyles({
-    heading: {
-        marginBottom: '30px',
-    },
-    productCard: {
-        alignItems: 'end',
-        margin: '20px 0',
-        width: '400px',
-        borderRadius: '20px',
-    },
-    main: {
-        maxWidth: '100vw',
-        marginTop: '15px',
-        marginLeft: 240,
-    },
-    products: {
-        margin: '0 50px',
-    },
-    productImg: {
-        height: '200px',
-        width: 'auto',
-        borderRadius: '20px',
-    },
-    checkout: {
-        margin: '20px 0',
-    },
-});
+import { useStyle } from '../styles/cart';
+import CartSkeleton from '../sub-components/Cart/CartSkeleton';
 
 const Cart: React.FC = (): JSX.Element => {
     if(localStorage.getItem('token') === null){
         window.location.href = '/boafresh-api-react-ts-reduxtoolkit/login'
     }
-    
-    const array = [1, 2, 3, 4, 5];
+
     const classes = useStyle();
 
     const [openAlert, setOpenAlert] = useState(true);
 
-    const { data, isError, isLoading, isSuccess } = useGetCartQuery();
+    const { data, isError, isLoading } = useGetCartQuery();
 
     const [updateCart, updateResponse] = useUpdateCartMutation();
     const [deleteCart, deleteResponse] = useDeleteCartMutation();
@@ -82,68 +53,10 @@ const Cart: React.FC = (): JSX.Element => {
     return isError ? (
         <>Something is Wrong</>
     ) : isLoading ? (
-        <Box component="main" className={classes.main}>
-            <Box className={classes.products}>
-                <Box className={classes.heading}>
-                    <Typography variant="h4" component="div">
-                        My Cart
-                    </Typography>
-                </Box>
-                <TableContainer component={Paper}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Image</TableCell>
-                                <TableCell>Product Name</TableCell>
-                                <TableCell>Unit Price</TableCell>
-                                <TableCell>Quantity</TableCell>
-                                <TableCell>Sub Total</TableCell>
-                                <TableCell>Action</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {array.map((product) => (
-                                <TableRow key={product}>
-                                    <TableCell width={500}>
-                                        <Skeleton
-                                            variant="rectangular"
-                                            width={200}
-                                            height={200}
-                                        />
-                                    </TableCell>
-                                    <TableCell>
-                                        <Skeleton variant="text" height={40} />
-                                    </TableCell>
-                                    <TableCell>
-                                        <Skeleton variant="text" height={40} />
-                                    </TableCell>
-                                    <TableCell>
-                                        <Skeleton
-                                            variant="rectangular"
-                                            width={150}
-                                            height={50}
-                                        />
-                                    </TableCell>
-                                    <TableCell>
-                                        <Skeleton variant="text" height={40} />
-                                    </TableCell>
-                                    <TableCell>
-                                        <Skeleton
-                                            variant="circular"
-                                            height={40}
-                                            width={40}
-                                        />
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Box>
-        </Box>
+        <CartSkeleton/>
     ) : data ? (
         <Box component="main" className={classes.main}>
-            <Box className={classes.products}>
+            <Box className={classes.inner}>
                 <Box className={classes.heading}>
                     <Typography variant="h4" component="div">
                         My Cart

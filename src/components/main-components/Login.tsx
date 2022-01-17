@@ -12,35 +12,11 @@ import {
     FormControlLabel,
     Checkbox,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { NavLink } from 'react-router-dom';
 import { EmailOutlined, PasswordOutlined } from '@mui/icons-material';
 import { useLoginUserMutation } from '../../services/user';
 import { useForm } from 'react-hook-form';
-
-const useStyle = makeStyles({
-    main: {
-        maxWidth: '100vw',
-        marginTop: '15px',
-        marginLeft: '240px',
-    },
-    home: {
-        margin: '100px 150px',
-    },
-    heading: {
-        marginBottom: '30px',
-        textAlign: 'center',
-    },
-    formCard: {
-        height: '100%',
-        borderRadius: '25px',
-        padding: '0 50px 50px',
-        backgroundImage: `url(${'https://images.unsplash.com/photo-1490818387583-1baba5e638af?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1032&q=80'})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
-    },
-});
+import { useStyle } from '../styles/user';
 
 const Login: React.FC = (): JSX.Element => {
     if(localStorage.getItem('token') !== null){
@@ -59,8 +35,6 @@ const Login: React.FC = (): JSX.Element => {
         password: '',
     });
 
-    const [errorMessage, setErrorMessage] = useState('Cannot Login')
-
     const [loginUser, responseInfo] = useLoginUserMutation();
     if (responseInfo.isSuccess) {
         window.localStorage.setItem(
@@ -76,7 +50,7 @@ const Login: React.FC = (): JSX.Element => {
 
     return (
         <Box component="main" className={classes.main}>
-            <Box className={classes.home}>
+            <Box className={classes.inner}>
                 <Card className={classes.formCard}>
                     <CardContent style={{ marginLeft: '50%' }}>
                         <Typography

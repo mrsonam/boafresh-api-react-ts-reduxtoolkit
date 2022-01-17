@@ -10,23 +10,8 @@ import {
     Alert,
 } from '@mui/material';
 import { PasswordOutlined } from '@mui/icons-material';
-import { makeStyles } from '@mui/styles';
 import { useChangePasswordMutation } from '../../services/user';
-
-const useStyle = makeStyles({
-    main: {
-        maxWidth: '100vw',
-        marginTop: '15px',
-        marginLeft: '240px',
-    },
-    home: {
-        margin: '0 50px',
-    },
-    heading: {
-        marginBottom: '30px',
-        textAlign: 'center',
-    },
-});
+import { useStyle } from '../styles/constants';
 
 const ChangePassword: React.FC = (): JSX.Element => {
     if(localStorage.getItem('token') === null){
@@ -45,7 +30,7 @@ const ChangePassword: React.FC = (): JSX.Element => {
 
     return (
         <Box className={classes.main} component="main">
-            <Box className={classes.home}>
+            <Box className={classes.inner}>
                 <Box>
                     <Typography
                         variant="h4"

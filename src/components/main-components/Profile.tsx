@@ -15,26 +15,11 @@ import {
     PhoneAndroidOutlined,
     EmailOutlined,
 } from '@mui/icons-material';
-import { makeStyles } from '@mui/styles';
 import {
     useGetUserProfileQuery,
     useUpdateUserProfileMutation,
 } from '../../services/user';
-
-const useStyle = makeStyles({
-    main: {
-        maxWidth: '100vw',
-        marginTop: '15px',
-        marginLeft: '240px',
-    },
-    home: {
-        margin: '0 50px',
-    },
-    heading: {
-        marginBottom: '30px',
-        textAlign: 'center',
-    },
-});
+import { useStyle } from '../styles/constants';
 
 const Profile: React.FC = (): JSX.Element => {
     if (localStorage.getItem('token') === null) {
@@ -43,7 +28,7 @@ const Profile: React.FC = (): JSX.Element => {
 
     const classes = useStyle();
 
-    const { data, isLoading, error } = useGetUserProfileQuery();
+    const { data, error } = useGetUserProfileQuery();
 
     const [firstName, setFirstName] = useState(data ? data.data.firstName : '');
     const [lastName, setLastName] = useState(data ? data.data.lastName : '');
@@ -71,7 +56,7 @@ const Profile: React.FC = (): JSX.Element => {
         <>Something is Wrong!</>
     ) : (
         <Box className={classes.main} component="main">
-            <Box className={classes.home}>
+            <Box className={classes.inner}>
                 <Box>
                     <Typography
                         variant="h4"

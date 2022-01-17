@@ -6,7 +6,6 @@ import {
     CardContent,
     Button,
     Stack,
-    Skeleton,
     Divider,
     FormControl,
     InputLabel,
@@ -14,7 +13,6 @@ import {
     Select,
     SelectChangeEvent,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { useDeleteCartMutation, useGetCartQuery } from '../../services/cart';
 import { CartProductData } from '../../types/cart';
 import {
@@ -23,36 +21,9 @@ import {
 } from '../../services/delivery';
 import AddressDialog from '../sub-components/Checkout/AddressDialog';
 import { useForm } from 'react-hook-form';
+import { useStyle } from '../styles/checkout';
+import CheckoutSkeleton from '../sub-components/Checkout/CheckoutSkeleton';
 
-const useStyle = makeStyles({
-    heading: {
-        marginBottom: '30px',
-    },
-    cartCard: {
-        margin: '20px 0',
-        width: '600px',
-        borderRadius: '20px',
-    },
-    deliveryCard: {
-        margin: '20px 0',
-        width: '600px',
-        height: '430px',
-        borderRadius: '20px',
-    },
-    main: {
-        maxWidth: '100vw',
-        marginTop: '15px',
-        marginLeft: 240,
-    },
-    inner: {
-        margin: '0 50px',
-    },
-    cardImg: {
-        height: 'auto',
-        width: '30%',
-        borderRadius: '20px',
-    },
-});
 
 const Checkout: React.FC = (): JSX.Element => {
     if(localStorage.getItem('token') === null){
@@ -102,58 +73,7 @@ const Checkout: React.FC = (): JSX.Element => {
     return getCart.error ? (
         <>Something is Wrong</>
     ) : getCart.isLoading ? (
-        <Box component="main" className={classes.main}>
-            <Box className={classes.inner}>
-                <Skeleton
-                    className={classes.heading}
-                    animation="wave"
-                    variant="text"
-                    width={300}
-                    height={50}
-                />
-                <Stack direction="row" spacing={3} className={classes.cartCard}>
-                    <Skeleton
-                        animation="wave"
-                        variant="rectangular"
-                        width={450}
-                        height={450}
-                        className={classes.cardImg}
-                    />
-                    <Stack spacing={2}>
-                        <Skeleton
-                            animation="wave"
-                            variant="text"
-                            width={200}
-                            height={45}
-                        />
-                        <Skeleton
-                            animation="wave"
-                            variant="text"
-                            width={100}
-                            height={30}
-                        />
-                        <Skeleton
-                            animation="wave"
-                            variant="text"
-                            width={50}
-                            height={30}
-                        />
-                        <Skeleton
-                            animation="wave"
-                            variant="text"
-                            width={100}
-                            height={50}
-                        />
-                        <Skeleton
-                            animation="wave"
-                            variant="text"
-                            width={150}
-                            height={50}
-                        />
-                    </Stack>
-                </Stack>
-            </Box>
-        </Box>
+        <CheckoutSkeleton/>
     ) : getCart.data ? (
         <Box component="main" className={classes.main}>
             <Box className={classes.inner}>

@@ -10,7 +10,6 @@ import {
     CardActionArea,
     Grid,
     Stack,
-    Skeleton,
     Tabs,
     Tab,
     FormControl,
@@ -20,47 +19,28 @@ import {
     SelectChangeEvent,
     Pagination,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { NavLink } from 'react-router-dom';
 import CartDialog from '../sub-components/Cart/CartDialog';
 import { GridViewOutlined, ViewListOutlined } from '@mui/icons-material';
 import { Product } from '../../types/products';
-
-const useStyle = makeStyles({
-    heading: {
-        marginBottom: '30px',
-    },
-    productCard: {
-        borderRadius: '20px',
-    },
-    main: {
-        maxWidth: '100vw',
-        marginTop: '15px',
-        marginLeft: 240,
-    },
-    products: {
-        margin: '0 50px',
-    },
-    tabs: {
-        margin: '20px 0',
-    },
-});
+import { useStyle } from '../styles/products';
+import ProductsSkeleton from '../sub-components/Products/ProductsSkeleton';
 
 const Products: React.FC = (): JSX.Element => {
-    const [openCartDialog, setOpenCartDialog] = useState(false);
-    const [productId, setProductId] = useState(0);
-
-    const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
     const classes = useStyle();
 
+    //fetch products
     const { data, error, isLoading } = useGetAllProductsQuery();
 
-    const [products, setProducts] = useState<Product[]>([]);
+    const [products, setProducts] = useState<Product[]>(data?.data || []);
 
     useEffect(() => {
         setProducts(data?.data || []);
     }, [data]);
+
+    //cart dialog
+    const [openCartDialog, setOpenCartDialog] = useState(false);
+    const [productId, setProductId] = useState(0);
 
     const openDialog = (id: number) => {
         setProductId(id);
@@ -71,6 +51,7 @@ const Products: React.FC = (): JSX.Element => {
         setOpenCartDialog(false);
     };
 
+    //list view and grid view
     const [view, setView] = useState(0);
 
     const handleViewChange = (
@@ -80,6 +61,7 @@ const Products: React.FC = (): JSX.Element => {
         setView(newValue);
     };
 
+    //sorting
     const [sort, setSort] = useState('');
     const [productsToSort, setProductsToSort] = useState<Product[]>([]);
 
@@ -128,6 +110,7 @@ const Products: React.FC = (): JSX.Element => {
 
     useEffect(sortProducts, [sort]);
 
+    //pagination
     const [page, setPage] = useState(1);
     const [productsPerPage, setProductsPerPage] = useState('10');
     const [indexOfFirst, setIndexOfFirst] = useState(0);
@@ -155,60 +138,10 @@ const Products: React.FC = (): JSX.Element => {
     return error ? (
         <>Something is Wrong</>
     ) : isLoading ? (
-        <Box component="main" className={classes.main}>
-            <Box className={classes.products}>
-                <Box className={classes.heading}>
-                    <Skeleton
-                        animation="wave"
-                        variant="text"
-                        width={300}
-                        height={50}
-                    />
-                    <Skeleton
-                        animation="wave"
-                        variant="text"
-                        width={150}
-                        height={30}
-                    />
-                </Box>
-                <Grid container spacing={5}>
-                    {array.map((elem) => {
-                        return (
-                            <Grid item xs={2.4} key={elem}>
-                                <Skeleton
-                                    animation="wave"
-                                    variant="rectangular"
-                                    width={'100%'}
-                                    height={250}
-                                    className={classes.productCard}
-                                />
-                                <Skeleton
-                                    animation="wave"
-                                    variant="text"
-                                    width={100}
-                                    height={40}
-                                />
-                                <Skeleton
-                                    animation="wave"
-                                    variant="text"
-                                    width={50}
-                                    height={30}
-                                />
-                                <Skeleton
-                                    animation="wave"
-                                    variant="rectangular"
-                                    width={'100%'}
-                                    height={30}
-                                />
-                            </Grid>
-                        );
-                    })}
-                </Grid>
-            </Box>
-        </Box>
+        <ProductsSkeleton />
     ) : data ? (
         <Box component="main" className={classes.main}>
-            <Box className={classes.products}>
+            <Box className={classes.inner}>
                 <Box className={classes.heading}>
                     <Typography variant="h4" component="div">
                         All Products
@@ -258,10 +191,7 @@ const Products: React.FC = (): JSX.Element => {
                             .map((product) => {
                                 return (
                                     <Grid item xs={2.4} key={product.id}>
-                                        <Card
-                                            sx={{ borderRadius: '20px' }}
-                                            className={classes.productCard}
-                                        >
+                                        <Card className={classes.productCard}>
                                             <CardActionArea>
                                                 <NavLink
                                                     to={`/boafresh-api-react-ts-reduxtoolkit/product/${product.id}`}
@@ -321,10 +251,7 @@ const Products: React.FC = (): JSX.Element => {
                             .map((product) => {
                                 return (
                                     <Grid item xs={12} key={product.id}>
-                                        <Card
-                                            sx={{ borderRadius: '20px' }}
-                                            className={classes.productCard}
-                                        >
+                                        <Card className={classes.productCard}>
                                             <Stack direction="row" spacing={5}>
                                                 <CardActionArea
                                                     style={{

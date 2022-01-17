@@ -8,38 +8,14 @@ import {
     CardContent,
     Button,
     Stack,
-    Skeleton,
     ButtonGroup,
     Snackbar,
     Alert
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { useParams } from 'react-router-dom';
 import { useAddToCartMutation } from '../../services/cart';
-
-const useStyle = makeStyles({
-    heading: {
-        marginBottom: '30px',
-    },
-    productCard: {
-        display: 'flex',
-        background: 'transparent',
-        boxShadow: 'none',
-    },
-    main: {
-        maxWidth: '100vw',
-        marginTop: '15px',
-        marginLeft: 240,
-    },
-    products: {
-        margin: '0 50px',
-    },
-    cardImg: {
-        height: 'auto',
-        width: '30%',
-        borderRadius: '20px',
-    },
-});
+import {useStyle} from '../styles/product'
+import ProuctSkeleton from '../sub-components/Products/ProuctSkeleton';
 
 const Product: React.FC = (): JSX.Element => {
     const classes = useStyle();
@@ -75,65 +51,10 @@ const Product: React.FC = (): JSX.Element => {
     return error ? (
         <>Something is Wrong</>
     ) : isLoading ? (
-        <Box component="main" className={classes.main}>
-            <Box className={classes.products}>
-                <Skeleton
-                    className={classes.heading}
-                    animation="wave"
-                    variant="text"
-                    width={300}
-                    height={50}
-                />
-                <Stack
-                    direction="row"
-                    spacing={3}
-                    className={classes.productCard}
-                >
-                    <Skeleton
-                        animation="wave"
-                        variant="rectangular"
-                        width={450}
-                        height={450}
-                        className={classes.cardImg}
-                    />
-                    <Stack spacing={2}>
-                        <Skeleton
-                            animation="wave"
-                            variant="text"
-                            width={200}
-                            height={45}
-                        />
-                        <Skeleton
-                            animation="wave"
-                            variant="text"
-                            width={100}
-                            height={30}
-                        />
-                        <Skeleton
-                            animation="wave"
-                            variant="text"
-                            width={50}
-                            height={30}
-                        />
-                        <Skeleton
-                            animation="wave"
-                            variant="text"
-                            width={100}
-                            height={50}
-                        />
-                        <Skeleton
-                            animation="wave"
-                            variant="text"
-                            width={150}
-                            height={50}
-                        />
-                    </Stack>
-                </Stack>
-            </Box>
-        </Box>
+        <ProuctSkeleton/>
     ) : data ? (
         <Box component="main" className={classes.main}>
-            <Box className={classes.products}>
+            <Box className={classes.inner}>
                 <Box className={classes.heading}>
                     <Typography variant="h4" component="div">
                         {data.data.title}

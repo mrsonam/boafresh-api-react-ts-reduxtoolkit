@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
     Box,
     Card,
@@ -25,7 +25,6 @@ const useStyle = makeStyles({
         borderRadius: '20px',
     },
 });
-
 
 const NewDishes = () => {
     const [open, setOpen] = useState(false);
@@ -111,7 +110,9 @@ const NewDishes = () => {
                                     className="productCard"
                                 >
                                     <CardActionArea>
-                                        <NavLink to={`/boafresh-api-react-ts-reduxtoolkit/product/${product.id}`}>
+                                        <NavLink
+                                            to={`/boafresh-api-react-ts-reduxtoolkit/product/${product.id}`}
+                                        >
                                             <CardMedia
                                                 className="categoryImage"
                                                 component="img"
@@ -143,9 +144,11 @@ const NewDishes = () => {
                                                 }
                                             </Typography>
                                             <Button
-                                                size="small"
                                                 variant="contained"
-                                                onClick={()=>openDialog(product.id)}
+                                                onClick={() =>
+                                                    openDialog(product.id)
+                                                }
+                                                sx={{ fontWeight: 'bold' }}
                                             >
                                                 Add To Cart
                                             </Button>
@@ -158,10 +161,10 @@ const NewDishes = () => {
                 )}
             </Grid>
             <CartDialog
-                    open={open}
-                    productId={productId}
-                    closeDialog={closeDialog}
-                />
+                open={open}
+                productId={productId}
+                closeDialog={closeDialog}
+            />
         </Box>
     ) : (
         <></>
